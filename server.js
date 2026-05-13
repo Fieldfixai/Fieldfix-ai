@@ -1,36 +1,447 @@
-const express = require("express");
-const cors = require("cors");
-const fetch = require("node-fetch");
-const path = require("path");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FieldFix AI - Industrial Troubleshooting</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f5f6f7; color: #1a1a1a; display: flex; flex-direction: column; height: 100vh; }
 
-const app = express();
-app.use(cors());
-app.use(express.json());
-app.use(express.static(path.join(__dirname, "public")));
+    /* Header */
+    #header { background: #fff; border-bottom: 3px solid #e65c00; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.07); flex-shrink: 0; }
+    #logo { display: flex; align-items: center; gap: 10px; }
+    #logo-icon { width: 38px; height: 38px; background: #e65c00; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    #logo-text { font-size: 17px; font-weight: 800; color: #1a1a1a; }
+    #logo-sub { font-size: 10px; color: #999; }
+    #header-right { display: flex; align-items: center; gap: 10px; }
+    #query-badge { background: #fff8f5; border: 1px solid #e65c00; border-radius: 20px; padding: 4px 12px; font-size: 12px; color: #e65c00; font-weight: 600; }
+    #upgrade-btn { background: #e65c00; color: #fff; border: none; border-radius: 20px; padding: 6px 16px; font-size: 12px; font-weight: 700; cursor: pointer; }
+    #new-btn { background: #f0f0f0; border: 1px solid #ddd; color: #666; border-radius: 8px; padding: 6px 12px; font-size: 12px; cursor: pointer; display: none; }
 
-const API_KEY = process.env.ANTHROPIC_API_KEY;
+    /* Categories */
+    #categories { background: #fff; border-bottom: 1px solid #ebebeb; padding: 10px 16px; overflow-x: auto; flex-shrink: 0; }
+    #cat-scroll { display: flex; gap: 8px; min-width: max-content; }
+    .cat-btn { border-radius: 20px; padding: 6px 14px; font-size: 12px; font-weight: 400; cursor: pointer; border: 1px solid #e5e5e5; background: #f5f5f5; color: #555; font-family: inherit; white-space: nowrap; transition: all 0.15s; }
+    .cat-btn.active { color: #fff; font-weight: 700; }
 
-app.post("/api/chat", async (req, res) => {
+    /* Main */
+    #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+    /* Empty state */
+    #empty-state { flex: 1; overflow-y: auto; padding: 24px 20px; }
+    #hero { text-align: center; margin-bottom: 24px; }
+    #hero-icon { width: 60px; height: 60px; background: #e65c0018; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 12px; }
+    #hero-title { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+    #hero-sub { font-size: 13px; color: #888; }
+    #prompts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 600px; margin: 0 auto 20px; }
+    .prompt-btn { background: #fff; border: 1.5px solid #ebebeb; color: #333; padding: 13px 14px; text-align: left; cursor: pointer; font-size: 13px; font-family: inherit; line-height: 1.4; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); transition: all 0.15s; }
+    .prompt-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(230,92,0,0.15); border-color: #e65c00; }
+    .prompt-label { display: block; color: #e65c00; font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 4px; }
+    #free-notice { max-width: 600px; margin: 0 auto; background: #fff8f5; border: 1px solid #ffd5b8; border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    #free-notice-text { font-size: 13px; font-weight: 700; color: #e65c00; }
+    #free-notice-sub { font-size: 12px; color: #888; }
+    #free-notice-btn { background: #e65c00; color: #fff; border: none; border-radius: 8px; padding: 8px 16px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; white-space: nowrap; }
+
+    /* Chat */
+    #chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+    .msg-row { display: flex; gap: 10px; align-items: flex-start; }
+    .msg-row.user { flex-direction: row-reverse; }
+    .msg-avatar { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; margin-top: 2px; }
+    .msg-avatar.ai { background: #e65c00; }
+    .msg-avatar.user { background: #1a1a1a; }
+    .msg-bubble { max-width: 78%; padding: 11px 15px; font-size: 14px; line-height: 1.75; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .msg-bubble.ai { background: #fff; border: 1px solid #ebebeb; border-radius: 4px 16px 16px 16px; color: #1a1a1a; }
+    .msg-bubble.user { background: #1a1a1a; border-radius: 16px 4px 16px 16px; color: #fff; }
+    .typing-dots { display: flex; gap: 5px; align-items: center; padding: 13px 16px; background: #fff; border: 1px solid #ebebeb; border-radius: 4px 16px 16px 16px; }
+    .dot { width: 8px; height: 8px; background: #e65c00; border-radius: 50%; animation: bounce 1s ease-in-out infinite; }
+    .dot:nth-child(2) { animation-delay: 0.18s; }
+    .dot:nth-child(3) { animation-delay: 0.36s; }
+    #nudge-bar { background: #fff8f5; border: 1px solid #ffd5b8; border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    #nudge-text { font-size: 13px; color: #e65c00; font-weight: 600; }
+    #nudge-btn { background: #e65c00; color: #fff; border: none; border-radius: 8px; padding: 7px 14px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; }
+
+    /* Input */
+    #input-bar { background: #fff; border-top: 1px solid #ebebeb; padding: 14px 20px; flex-shrink: 0; box-shadow: 0 -2px 8px rgba(0,0,0,0.04); }
+    #input-wrap { display: flex; gap: 10px; align-items: flex-end; max-width: 860px; margin: 0 auto; }
+    #msg-input { flex: 1; background: #f8f8f8; border: 1.5px solid #e5e5e5; color: #1a1a1a; padding: 10px 14px; font-size: 14px; font-family: inherit; resize: none; outline: none; line-height: 1.5; border-radius: 12px; }
+    #msg-input:focus { border-color: #e65c00; }
+    #send-btn { background: #e65c00; color: #fff; border: none; padding: 0 22px; height: 54px; font-size: 14px; font-weight: 700; border-radius: 12px; cursor: pointer; font-family: inherit; transition: all 0.2s; white-space: nowrap; }
+    #send-btn:disabled { background: #e5e5e5; color: #aaa; cursor: not-allowed; }
+    #input-hint { font-size: 11px; color: #ccc; margin-top: 6px; text-align: center; }
+
+    /* Paywall */
+    #paywall { display: none; min-height: 100vh; background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%); flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
+    #paywall.visible { display: flex; }
+    #paywall-icon { width: 52px; height: 52px; background: #e65c00; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: 16px; }
+    #paywall-title { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 8px; text-align: center; }
+    #paywall-sub { font-size: 15px; color: #aaa; margin-bottom: 36px; text-align: center; max-width: 420px; }
+    #plans { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; max-width: 760px; width: 100%; }
+    .plan-card { background: #1a1a1a; border: 2px solid #333; border-radius: 16px; padding: 28px 24px; flex: 1; min-width: 200px; max-width: 240px; position: relative; }
+    .plan-card.highlight { background: #e65c00; border-color: #e65c00; box-shadow: 0 8px 32px rgba(230,92,0,0.4); }
+    .plan-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #fff; color: #e65c00; font-size: 11px; font-weight: 800; padding: 3px 12px; border-radius: 20px; letter-spacing: 1px; white-space: nowrap; }
+    .plan-name { font-size: 16px; font-weight: 700; color: #ccc; margin-bottom: 6px; }
+    .plan-card.highlight .plan-name { color: #fff; }
+    .plan-price { font-size: 32px; font-weight: 800; color: #fff; margin-bottom: 2px; }
+    .plan-period { font-size: 14px; font-weight: 400; color: #666; }
+    .plan-card.highlight .plan-period { color: rgba(255,255,255,0.7); }
+    .plan-divider { height: 1px; background: #333; margin: 16px 0; }
+    .plan-card.highlight .plan-divider { background: rgba(255,255,255,0.2); }
+    .plan-feature { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 8px; font-size: 13px; color: #aaa; }
+    .plan-card.highlight .plan-feature { color: #fff; }
+    .plan-check { color: #e65c00; margin-top: 1px; }
+    .plan-card.highlight .plan-check { color: #fff; }
+    .plan-btn { margin-top: 20px; width: 100%; padding: 12px; border-radius: 10px; border: none; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .plan-btn.free { background: #333; color: #666; cursor: default; }
+    .plan-btn.pro { background: #fff; color: #e65c00; }
+    .plan-btn.expert { background: #0078d4; color: #fff; }
+    #back-btn { margin-top: 24px; background: none; border: none; color: #555; font-size: 13px; cursor: pointer; font-family: inherit; }
+
+    .step { display: flex; gap: 9px; margin: 6px 0; align-items: flex-start; }
+    .snum { background: #f0f0f0; color: #333; font-weight: 700; min-width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; }
+    .bul { margin: 4px 0; padding-left: 4px; color: #444; }
+    p { margin: 5px 0; }
+    strong { font-weight: 700; }
+    @keyframes bounce { 0%,100%{transform:translateY(0);opacity:.35} 50%{transform:translateY(-5px);opacity:1} }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: #ddd; border-radius: 2px; }
+  </style>
+</head>
+<body>
+
+<!-- PAYWALL -->
+<div id="paywall">
+  <div id="paywall-icon">⚙️</div>
+  <div id="paywall-title">You've used your 3 free queries</div>
+  <div id="paywall-sub">Upgrade to Pro for unlimited troubleshooting — less than the cost of one hour of downtime.</div>
+  <div id="plans">
+    <div class="plan-card">
+      <div class="plan-name">Free</div>
+      <div class="plan-price">$0</div>
+      <div class="plan-divider"></div>
+      <div class="plan-feature"><span class="plan-check">✓</span> 3 queries per day</div>
+      <div class="plan-feature"><span class="plan-check">✓</span> All equipment types</div>
+      <div class="plan-feature"><span class="plan-check">✓</span> Basic troubleshooting</div>
+      <button class="plan-btn free">Current Plan</button>
+    </div>
+    <div class="plan-card highlight">
+      <div class="plan-badge">MOST POPULAR</div>
+      <div class="plan-name">Pro</div>
+      <div class="plan-price">$9.99<span class="plan-period">/month</span></div>
+      <div class="plan-divider"></div>
+      <div class="plan-feature"><span class="plan-check">✓</span> Unlimited queries</div>
+      <div class="plan-feature"><span class="plan-check">✓</span> Save session history</div>
+      <div class="plan-feature"><span class="plan-check">✓</span> All equipment types</div>
+      <div class="plan-feature"><span class="plan-check">✓</span> Step-by-step guidance</div>
+      <div class="plan-feature"><span class="plan-check">✓</span> Cancel anytime</div>
+      <button class="plan-btn pro" onclick="activatePro()">Go Pro →</button>
+    </div>
+    <div class="plan-card">
+      <div class="plan-name">Expert</div>
+      <div class="plan-price">$19.99<span class="plan-period">/month</span></div>
+      <div class="plan-divider"></div>
+      <div class="plan-feature"><span class="plan-check" style="color:#0078d4">✓</span> Everything in Pro</div>
+      <div class="plan-feature"><span class="plan-check" style="color:#0078d4">✓</span> Wiring diagram guides</div>
+      <div class="plan-feature"><span class="plan-check" style="color:#0078d4">✓</span> Parts reference lookup</div>
+      <div class="plan-feature"><span class="plan-check" style="color:#0078d4">✓</span> Priority responses</div>
+      <div class="plan-feature"><span class="plan-check" style="color:#0078d4">✓</span> Export session reports</div>
+      <button class="plan-btn expert" onclick="activatePro()">Go Expert →</button>
+    </div>
+  </div>
+  <button id="back-btn" onclick="hidePaywall()">← Back to app</button>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+  <div id="header">
+    <div id="logo">
+      <div id="logo-icon">⚙️</div>
+      <div>
+        <div id="logo-text">FieldFix AI</div>
+        <div id="logo-sub">Industrial Troubleshooting Assistant</div>
+      </div>
+    </div>
+    <div id="header-right">
+      <div id="query-badge">3 free queries left</div>
+      <button id="upgrade-btn" onclick="showPaywall()">Upgrade</button>
+      <button id="new-btn" onclick="newSession()">New</button>
+    </div>
+  </div>
+
+  <div id="categories">
+    <div id="cat-scroll"></div>
+  </div>
+
+  <div id="main">
+    <div id="empty-state">
+      <div id="hero">
+        <div id="hero-icon">🔧</div>
+        <div id="hero-title">Fanuc CNC Troubleshooter</div>
+        <div id="hero-sub">Type your alarm code or tap a common fault below</div>
+      </div>
+      <div id="prompts-grid"></div>
+      <div id="free-notice">
+        <div>
+          <div id="free-notice-text">Free Plan — 3 queries remaining today</div>
+          <div id="free-notice-sub">Upgrade to Pro for unlimited troubleshooting — $9.99/month</div>
+        </div>
+        <button id="free-notice-btn" onclick="showPaywall()">Upgrade →</button>
+      </div>
+    </div>
+    <div id="chat-container" style="display:none"></div>
+  </div>
+
+  <div id="input-bar">
+    <div id="input-wrap">
+      <textarea id="msg-input" rows="2" placeholder="Type alarm code, fault code, or describe your symptom..."></textarea>
+      <button id="send-btn" onclick="sendMessage()">Send →</button>
+    </div>
+    <div id="input-hint">Fanuc · Siemens · Allen-Bradley · I/O · Analog · Drives</div>
+  </div>
+</div>
+
+<script>
+const SYSTEM_PROMPT = `You are an expert industrial maintenance troubleshooting assistant with deep knowledge in Fanuc CNC controllers, Fanuc robots, Siemens Sinumerik CNC, Siemens S7 PLC, Allen-Bradley PLC, discrete input/output diagnostics, analog signal diagnostics (4-20mA, RTD, thermocouple), and industrial drives. When a technician describes a fault: identify the fault, give root causes with confidence level, provide exact screen navigation, step-by-step troubleshooting with test points and meter settings, tools needed, safety precautions, common mistakes, and repair time. Be direct and field-accurate. No disclaimers.`;
+
+const CATEGORIES = [
+  { key: "fanuc cnc",   label: "Fanuc CNC",    icon: "🔧", color: "#e65c00" },
+  { key: "fanuc robot", label: "Fanuc Robot",   icon: "🦾", color: "#e65c00" },
+  { key: "siemens cnc", label: "Siemens CNC",   icon: "⚡", color: "#0078d4" },
+  { key: "siemens plc", label: "Siemens PLC",   icon: "🖥️", color: "#0078d4" },
+  { key: "plc",         label: "Allen-Bradley", icon: "📡", color: "#cc0000" },
+  { key: "inputs",      label: "Inputs",        icon: "📥", color: "#107c10" },
+  { key: "outputs",     label: "Outputs",       icon: "📤", color: "#107c10" },
+  { key: "analog",      label: "Analog I/O",    icon: "📊", color: "#6b3fa0" },
+  { key: "electrical",  label: "Electrical",    icon: "🔌", color: "#b8860b" },
+  { key: "drives",      label: "Drives",        icon: "⚙️",  color: "#555" },
+];
+
+const QUICK_PROMPTS = {
+  "fanuc cnc":   ["Fanuc SV0023 X axis servo alarm", "Fanuc SP9030 spindle fault", "Fanuc OT0506 overtravel alarm", "Fanuc PMC alarm 1000 diagnosis"],
+  "fanuc robot": ["SRVO-068 DTERR joint 3", "SRVO-023 DCAL high speed moves", "SYST-034 HOT STANDBY alarm", "Lost mastering on J2"],
+  "siemens cnc": ["Sinumerik 840D alarm 25201 X axis", "Sinamics F07900 spindle drive", "Safety Integrated alarm 27001", "840D servo diagnostic screen navigation"],
+  "siemens plc": ["S7-300 SF and BF fault lights", "Profibus OB86 station dropout", "TIA Portal S7-1500 online monitor", "Q4.0 output TRUE device not activating"],
+  "plc":         ["ControlLogix major fault code 4 type 1", "Kinetix 6000 F007 axis fault", "Mitsubishi SP.UNIT DOWN error", "Safely force PLC output for testing"],
+  "inputs":      ["NPN prox sensor LED on PLC bit off", "Input ON with no device triggering", "Retroreflective photoelectric false trips", "Limit switch drops out intermittently"],
+  "outputs":     ["24VDC at terminal solenoid won't fire", "Output LED on 0V at terminal", "120VAC on contactor coil won't pull in", "Relay contacts welded after overload"],
+  "analog":      ["4-20mA transmitter wrong PLC reading", "Analog reading below 4mA loop powered", "Type J TC reads room temp when hot", "PT100 RTD reads 20 degrees high"],
+  "electrical":  ["24VDC relay coil won't pull in", "Intermittent E-stop no pattern", "GFCI trips on spindle start", "Encoder signal following error increasing"],
+  "drives":      ["Sinamics G120 F00011 startup overcurrent", "PowerFlex 755 fault 12 overcurrent", "DC bus overvoltage on deceleration", "Encoder feedback loss after motor swap"],
+};
+
+let activeCategory = "fanuc cnc";
+let messages = [];
+let queriesUsed = 0;
+let isPro = false;
+const FREE_LIMIT = 3;
+
+// Build category tabs
+function buildCategories() {
+  const scroll = document.getElementById("cat-scroll");
+  scroll.innerHTML = "";
+  CATEGORIES.forEach(c => {
+    const btn = document.createElement("button");
+    btn.className = "cat-btn" + (c.key === activeCategory ? " active" : "");
+    btn.style.cssText += c.key === activeCategory ? `background:${c.color};border-color:${c.color};color:#fff` : "";
+    btn.innerHTML = `${c.icon} ${c.label}`;
+    btn.onclick = () => selectCategory(c.key);
+    scroll.appendChild(btn);
+  });
+}
+
+function selectCategory(key) {
+  activeCategory = key;
+  buildCategories();
+  buildPrompts();
+  const cat = CATEGORIES.find(c => c.key === key);
+  document.getElementById("hero-icon").textContent = cat.icon;
+  document.getElementById("hero-title").textContent = cat.label + " Troubleshooter";
+  document.getElementById("header").style.borderBottomColor = cat.color;
+  document.getElementById("logo-icon").style.background = cat.color;
+}
+
+// Build quick prompts
+function buildPrompts() {
+  const grid = document.getElementById("prompts-grid");
+  const prompts = QUICK_PROMPTS[activeCategory] || [];
+  const cat = CATEGORIES.find(c => c.key === activeCategory);
+  grid.innerHTML = "";
+  prompts.forEach(p => {
+    const btn = document.createElement("button");
+    btn.className = "prompt-btn";
+    btn.innerHTML = `<span class="prompt-label" style="color:${cat.color}">Quick Fault</span>${p}`;
+    btn.onmouseenter = () => { btn.style.borderColor = cat.color; };
+    btn.onmouseleave = () => { btn.style.borderColor = "#ebebeb"; };
+    btn.onclick = () => sendMessage(p);
+    grid.appendChild(btn);
+  });
+}
+
+function updateQueryBadge() {
+  const left = FREE_LIMIT - queriesUsed;
+  document.getElementById("query-badge").textContent = left + " free " + (left === 1 ? "query" : "queries") + " left";
+  document.getElementById("free-notice-text").textContent = "Free Plan — " + left + " " + (left === 1 ? "query" : "queries") + " remaining today";
+  if (isPro) {
+    document.getElementById("query-badge").textContent = "⭐ Pro";
+    document.getElementById("query-badge").style.cssText = "background:#fff8f5;border:1px solid #e65c00;border-radius:20px;padding:4px 12px;font-size:12px;color:#e65c00;font-weight:700";
+    document.getElementById("upgrade-btn").style.display = "none";
+    document.getElementById("free-notice").style.display = "none";
+  }
+}
+
+function formatMessage(text) {
+  let f = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+  f = f.replace(/^(\d+)\.\s(.+)/gm, '<div class="step"><span class="snum">$1</span><span>$2</span></div>');
+  f = f.replace(/^[-•]\s(.+)/gm, '<div class="bul">• $1</div>');
+  f = f.replace(/\n\n/g, "</p><p>").replace(/\n/g, "<br/>");
+  return "<p>" + f + "</p>";
+}
+
+function addMessage(role, content) {
+  const chat = document.getElementById("chat-container");
+  const row = document.createElement("div");
+  row.className = "msg-row " + role;
+  const avatar = document.createElement("div");
+  avatar.className = "msg-avatar " + role;
+  avatar.textContent = role === "user" ? "👤" : "⚙️";
+  const bubble = document.createElement("div");
+  bubble.className = "msg-bubble " + role;
+  if (role === "assistant") {
+    bubble.innerHTML = formatMessage(content);
+  } else {
+    bubble.textContent = content;
+  }
+  row.appendChild(avatar);
+  row.appendChild(bubble);
+  chat.appendChild(row);
+  chat.scrollTop = chat.scrollHeight;
+  return row;
+}
+
+function showTyping() {
+  const chat = document.getElementById("chat-container");
+  const row = document.createElement("div");
+  row.className = "msg-row";
+  row.id = "typing-row";
+  const avatar = document.createElement("div");
+  avatar.className = "msg-avatar ai";
+  avatar.textContent = "⚙️";
+  const dots = document.createElement("div");
+  dots.className = "typing-dots";
+  dots.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+  row.appendChild(avatar);
+  row.appendChild(dots);
+  chat.appendChild(row);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function hideTyping() {
+  const el = document.getElementById("typing-row");
+  if (el) el.remove();
+}
+
+function showChat() {
+  document.getElementById("empty-state").style.display = "none";
+  document.getElementById("chat-container").style.display = "flex";
+  document.getElementById("new-btn").style.display = "block";
+}
+
+async function sendMessage(text) {
+  const input = document.getElementById("msg-input");
+  const userText = text || input.value.trim();
+  if (!userText) return;
+
+  if (!isPro && queriesUsed >= FREE_LIMIT) {
+    showPaywall();
+    return;
+  }
+
+  showChat();
+  input.value = "";
+  document.getElementById("send-btn").disabled = true;
+
+  messages.push({ role: "user", content: userText });
+  addMessage("user", userText);
+  showTyping();
+
+  if (!isPro) {
+    queriesUsed++;
+    updateQueryBadge();
+  }
+
   try {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+    const response = await fetch("/api/chat", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": API_KEY,
-        "anthropic-version": "2023-06-01",
-      },
-      body: JSON.stringify(req.body),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        system: SYSTEM_PROMPT,
+        messages: messages,
+      }),
     });
     const data = await response.json();
-    res.json(data);
+    const reply = data.content?.map(b => b.text || "").join("") || "No response.";
+    hideTyping();
+    messages.push({ role: "assistant", content: reply });
+    addMessage("assistant", reply);
+
+    // Show nudge after 2nd query
+    if (!isPro && queriesUsed >= 2) {
+      const chat = document.getElementById("chat-container");
+      const nudge = document.createElement("div");
+      nudge.id = "nudge-bar";
+      const left = FREE_LIMIT - queriesUsed;
+      nudge.innerHTML = `<div id="nudge-text">🔥 ${left} free ${left===1?"query":"queries"} left — Go Pro for unlimited</div><button id="nudge-btn" onclick="showPaywall()">Upgrade</button>`;
+      chat.appendChild(nudge);
+      chat.scrollTop = chat.scrollHeight;
+    }
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    hideTyping();
+    addMessage("assistant", "Error: " + err.message + " — Make sure server.js is running.");
   }
-});
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
+  document.getElementById("send-btn").disabled = false;
+}
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`FieldFix AI running on port ${PORT}`));
+function newSession() {
+  messages = [];
+  document.getElementById("chat-container").innerHTML = "";
+  document.getElementById("chat-container").style.display = "none";
+  document.getElementById("empty-state").style.display = "block";
+  document.getElementById("new-btn").style.display = "none";
+}
+
+function showPaywall() {
+  document.getElementById("paywall").classList.add("visible");
+  document.getElementById("app").style.display = "none";
+}
+
+function hidePaywall() {
+  document.getElementById("paywall").classList.remove("visible");
+  document.getElementById("app").style.display = "flex";
+  document.getElementById("app").style.flexDirection = "column";
+}
+
+function activatePro() {
+  isPro = true;
+  hidePaywall();
+  updateQueryBadge();
+}
+
+// Keyboard send
+document.addEventListener("DOMContentLoaded", () => {
+  buildCategories();
+  buildPrompts();
+  updateQueryBadge();
+
+  document.getElementById("msg-input").addEventListener("keydown", e => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+});
+</script>
+</body>
+</html>
