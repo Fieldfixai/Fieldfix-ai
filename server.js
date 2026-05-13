@@ -30,8 +30,11 @@ app.post("/api/chat", async (req, res) => {
       body: JSON.stringify(req.body),
     });
     const data = await response.json();
+    console.log("Response status:", response.status);
+    if (data.error) console.log("API error:", JSON.stringify(data.error));
     res.json(data);
   } catch (err) {
+    console.log("Error:", err.message);
     res.status(500).json({ error: err.message });
   }
 });
