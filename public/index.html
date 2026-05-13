@@ -381,7 +381,7 @@ async function sendMessage(text) {
       }),
     });
     const data = await response.json();
-    const reply = data.content?.map(b => b.text || "").join("") || "No response.";
+    console.log("API response:", JSON.stringify(data)); const reply = data.content?.map(b => b.text || "").join("") || (data.error ? "API Error: " + data.error.message : "No response - check logs");
     hideTyping();
     messages.push({ role: "assistant", content: reply });
     addMessage("assistant", reply);
@@ -398,7 +398,7 @@ async function sendMessage(text) {
     }
   } catch (err) {
     hideTyping();
-    addMessage("assistant", "Error: " + err.message + " — Make sure server.js is running.");
+    addMessage("assistant", "Error details: " + err.message + " | Status: " + (err.status || "unknown") + " | Check Railway logs");
   }
 
   document.getElementById("send-btn").disabled = false;
