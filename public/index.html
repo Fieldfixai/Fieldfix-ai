@@ -6,7 +6,7 @@
   <title>FieldFix AI - Industrial Troubleshooting</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f5f6f7; color: #1a1a1a; display: flex; flex-direction: column; height: 100vh; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f5f6f7; color: #1a1a1a; min-height: 100vh; }
     .auth-screen { display: none; min-height: 100vh; background: linear-gradient(135deg, #1a1a1a 0%, #2d1a0a 100%); flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
     .auth-screen.visible { display: flex; }
     .auth-box { background: #fff; border-radius: 16px; padding: 36px 32px; width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
@@ -99,8 +99,8 @@
     .pro-plan-btn { background: #fff; color: #e65c00; }
     .expert-plan-btn { background: #0078d4; color: #fff; }
     #back-btn { margin-top: 20px; background: none; border: none; color: #555; font-size: 12px; cursor: pointer; font-family: inherit; }
-    #app { display: none; flex-direction: column; height: 100vh; }
-    #app.visible { display: flex; }
+    #app { display: none; flex-direction: column; min-height: 100vh; }
+    #app.visible { display: flex !important; flex-direction: column; min-height: 100vh; }
     .step { display: flex; gap: 8px; margin: 5px 0; align-items: flex-start; }
     .snum { background: #f0f0f0; color: #333; font-weight: 700; min-width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; }
     .bul { margin: 3px 0; padding-left: 4px; color: #444; }
@@ -277,12 +277,13 @@ function showSignup() {
 
 function showApp() {
   console.log('showApp called');
-  document.getElementById("login-screen").classList.remove("visible");
-  document.getElementById("signup-screen").classList.remove("visible");
-  document.getElementById("paywall").classList.remove("visible");
-  document.getElementById("app").classList.add("visible");
-  console.log('App class after add:', document.getElementById('app').className);
-  console.log('App display:', document.getElementById('app').style.display);
+  document.getElementById("login-screen").style.display = "none";
+  document.getElementById("signup-screen").style.display = "none";
+  document.getElementById("paywall").style.display = "none";
+  document.getElementById("app").style.display = "flex";
+  document.getElementById("app").style.flexDirection = "column";
+  document.getElementById("app").style.minHeight = "100vh";
+  console.log('App display after:', document.getElementById('app').style.display);
 }
 
 function showPaywall() {
