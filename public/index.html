@@ -416,6 +416,8 @@ function newChat(){
 }
 
 async function send(txt){
+  token = localStorage.getItem("ff_tok");
+  if(!token){goLogin();return;}
   const inp=document.getElementById("minput");
   const text=txt||inp.value.trim();
   if(!text)return;
