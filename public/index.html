@@ -7,8 +7,8 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f5f6f7; color: #1a1a1a; min-height: 100vh; }
-    .auth-screen { display: none; min-height: 100vh; background: linear-gradient(135deg, #1a1a1a 0%, #2d1a0a 100%); flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
-    .auth-screen.visible { display: flex; }
+    .auth-screen { display: none; min-height: 100vh; background: linear-gradient(135deg, #1a1a1a 0%, #2d1a0a 100%); flex-direction: column; align-items: center; justify-content: center; padding: 24px; position: relative; z-index: 10; }
+    /* auth-screen.visible handled by JS */
     .auth-box { background: #fff; border-radius: 16px; padding: 36px 32px; width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
     .auth-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; justify-content: center; }
     .auth-logo-icon { width: 42px; height: 42px; background: #e65c00; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
@@ -263,16 +263,17 @@ let authToken = localStorage.getItem("fieldfix_token");
 let currentUser = null;
 
 function showLogin() {
-  document.getElementById("login-screen").classList.add("visible");
-  document.getElementById("signup-screen").classList.remove("visible");
-  document.getElementById("app").classList.remove("visible");
-  document.getElementById("paywall").classList.remove("visible");
+  document.getElementById("login-screen").style.display = "flex";
+  document.getElementById("signup-screen").style.display = "none";
+  document.getElementById("app").style.display = "none";
+  document.getElementById("paywall").style.display = "none";
 }
 
 function showSignup() {
-  document.getElementById("signup-screen").classList.add("visible");
-  document.getElementById("login-screen").classList.remove("visible");
-  document.getElementById("app").classList.remove("visible");
+  document.getElementById("signup-screen").style.display = "flex";
+  document.getElementById("login-screen").style.display = "none";
+  document.getElementById("app").style.display = "none";
+  document.getElementById("paywall").style.display = "none";
 }
 
 function showApp() {
@@ -298,13 +299,15 @@ function showApp() {
 }
 
 function showPaywall() {
-  document.getElementById("paywall").classList.add("visible");
-  document.getElementById("app").classList.remove("visible");
+  document.getElementById("paywall").style.display = "flex";
+  document.getElementById("app").style.display = "none";
 }
 
 function hidePaywall() {
-  document.getElementById("paywall").classList.remove("visible");
-  document.getElementById("app").classList.add("visible");
+  document.getElementById("paywall").style.display = "none";
+  document.getElementById("app").style.display = "flex";
+  document.getElementById("app").style.flexDirection = "column";
+  document.getElementById("app").style.minHeight = "100vh";
 }
 
 async function signup() {
