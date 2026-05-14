@@ -284,6 +284,17 @@ function showApp() {
   document.getElementById("app").style.flexDirection = "column";
   document.getElementById("app").style.minHeight = "100vh";
   console.log('App display after:', document.getElementById('app').style.display);
+  console.log('Header:', !!document.getElementById('header'));
+  console.log('Categories:', !!document.getElementById('categories'));
+  console.log('Main:', !!document.getElementById('main'));
+  console.log('App innerHTML length:', document.getElementById('app').innerHTML.length);
+  // Force all children visible
+  const app = document.getElementById('app');
+  app.querySelectorAll('*').forEach(el => {
+    if(getComputedStyle(el).display === 'none' && el.id !== 'chat-container' && el.id !== 'new-btn' && el.id !== 'paywall') {
+      console.log('Hidden element:', el.id || el.className);
+    }
+  });
 }
 
 function showPaywall() {
