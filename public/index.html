@@ -276,10 +276,13 @@ function showSignup() {
 }
 
 function showApp() {
+  console.log('showApp called');
   document.getElementById("login-screen").classList.remove("visible");
   document.getElementById("signup-screen").classList.remove("visible");
   document.getElementById("paywall").classList.remove("visible");
   document.getElementById("app").classList.add("visible");
+  console.log('App class after add:', document.getElementById('app').className);
+  console.log('App display:', document.getElementById('app').style.display);
 }
 
 function showPaywall() {
