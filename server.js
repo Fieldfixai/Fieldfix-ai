@@ -15,7 +15,9 @@ app.use((req, res, next) => {
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "public")));
+
+// Serve app static files from /public
+app.use("/app", express.static(path.join(__dirname, "public")));
 
 const API_KEY = process.env.ANTHROPIC_API_KEY;
 const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -60,33 +62,20 @@ function generateToken() {
   return crypto.randomBytes(32).toString("hex");
 }
 
-// Fixed requireAuth - two separate queries instead of join
 async function requireAuth(req, res, next) {
   const token = req.headers["authorization"]?.replace("Bearer ", "");
   if (!token) return res.status(401).json({ error: "Not logged in" });
-
   try {
-    // Get session
     const sessionResult = await supabase("GET", "sessions", null, `?token=eq.${token}`);
-    if (!sessionResult.data || !sessionResult.data[0]) {
-      return res.status(401).json({ error: "Session not found" });
-    }
+    if (!sessionResult.data || !sessionResult.data[0]) return res.status(401).json({ error: "Session not found" });
     const session = sessionResult.data[0];
-    if (new Date(session.expires_at) < new Date()) {
-      return res.status(401).json({ error: "Session expired" });
-    }
-
-    // Get user separately
+    if (new Date(session.expires_at) < new Date()) return res.status(401).json({ error: "Session expired" });
     const userResult = await supabase("GET", "users", null, `?id=eq.${session.user_id}`);
-    if (!userResult.data || !userResult.data[0]) {
-      return res.status(401).json({ error: "User not found" });
-    }
-
+    if (!userResult.data || !userResult.data[0]) return res.status(401).json({ error: "User not found" });
     req.user = userResult.data[0];
     req.userId = session.user_id;
     next();
   } catch (e) {
-    console.log("Auth error:", e.message);
     res.status(401).json({ error: "Auth error: " + e.message });
   }
 }
@@ -101,13 +90,10 @@ app.post("/api/signup", async (req, res) => {
     const userResult = await supabase("POST", "users", {
       email: email.toLowerCase(),
       password_hash: hashPassword(password),
-      plan: "free",
-      queries_used: 0,
+      plan: "free", queries_used: 0,
       queries_reset_date: new Date().toISOString().split("T")[0]
     });
-    if (!userResult.data || !userResult.data[0]) {
-      return res.status(500).json({ error: "Failed to create account: " + JSON.stringify(userResult.data) });
-    }
+    if (!userResult.data || !userResult.data[0]) return res.status(500).json({ error: "Failed to create account: " + JSON.stringify(userResult.data) });
     const user = userResult.data[0];
     const token = generateToken();
     await supabase("POST", "sessions", { user_id: user.id, token });
@@ -160,23 +146,14 @@ app.post("/api/chat", requireAuth, async (req, res) => {
   const today = new Date().toISOString().split("T")[0];
   let queriesUsed = user.queries_used;
   if (user.queries_reset_date !== today) queriesUsed = 0;
-  if (user.plan === "free" && queriesUsed >= FREE_LIMIT) {
-    return res.status(403).json({ error: "upgrade_required" });
-  }
+  if (user.plan === "free" && queriesUsed >= FREE_LIMIT) return res.status(403).json({ error: "upgrade_required" });
   if (user.plan === "free") {
     await supabase("PATCH", "users", { queries_used: queriesUsed + 1, queries_reset_date: today }, `?id=eq.${req.userId}`);
   }
   const body = JSON.stringify(req.body);
   const options = {
-    hostname: "api.anthropic.com",
-    path: "/v1/messages",
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Content-Length": Buffer.byteLength(body),
-      "x-api-key": API_KEY,
-      "anthropic-version": "2023-06-01"
-    }
+    hostname: "api.anthropic.com", path: "/v1/messages", method: "POST",
+    headers: { "Content-Type": "application/json", "Content-Length": Buffer.byteLength(body), "x-api-key": API_KEY, "anthropic-version": "2023-06-01" }
   };
   const request = https.request(options, (response) => {
     let data = "";
@@ -187,15 +164,24 @@ app.post("/api/chat", requireAuth, async (req, res) => {
     });
   });
   request.on("error", e => res.status(500).json({ error: e.message }));
-  request.write(body);
-  request.end();
+  request.write(body); request.end();
 });
 
 app.get("/api/status", (req, res) => {
   res.json({ status: "running", keyLoaded: !!API_KEY, supabaseUrl: !!SUPABASE_URL, supabaseKey: !!SUPABASE_KEY });
 });
 
-app.get("*", (req, res) => {
+// Landing page at root
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "landing.html"));
+});
+
+// App at /app
+app.get("/app", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+app.get("/app/*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
