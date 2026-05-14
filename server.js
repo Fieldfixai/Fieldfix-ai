@@ -24,8 +24,7 @@ const FREE_LIMIT = 3;
 
 function supabase(method, table, body, query = "") {
   return new Promise((resolve, reject) => {
-    const urlStr = `${SUPABASE_URL}/rest/v1/${table}${query}`;
-    const url = new URL(urlStr);
+    const url = new URL(`${SUPABASE_URL}/rest/v1/${table}${query}`);
     const bodyStr = body ? JSON.stringify(body) : "";
     const options = {
       hostname: url.hostname,
@@ -39,20 +38,15 @@ function supabase(method, table, body, query = "") {
       }
     };
     if (bodyStr) options.headers["Content-Length"] = Buffer.byteLength(bodyStr);
-
     const req = https.request(options, (res) => {
       let data = "";
       res.on("data", c => data += c);
       res.on("end", () => {
-        console.log(`Supabase ${method} ${table}: status=${res.statusCode} body=${data.substring(0, 200)}`);
         try { resolve({ status: res.statusCode, data: JSON.parse(data || "[]") }); }
-        catch (e) { resolve({ status: res.statusCode, data: [], raw: data }); }
+        catch (e) { resolve({ status: res.statusCode, data: [] }); }
       });
     });
-    req.on("error", (e) => {
-      console.log(`Supabase error: ${e.message}`);
-      reject(e);
-    });
+    req.on("error", reject);
     if (bodyStr) req.write(bodyStr);
     req.end();
   });
@@ -66,35 +60,44 @@ function generateToken() {
   return crypto.randomBytes(32).toString("hex");
 }
 
+// Fixed requireAuth - two separate queries instead of join
 async function requireAuth(req, res, next) {
   const token = req.headers["authorization"]?.replace("Bearer ", "");
   if (!token) return res.status(401).json({ error: "Not logged in" });
-  const result = await supabase("GET", "sessions", null, `?token=eq.${token}&select=*,users(*)`);
-  if (!result.data || !result.data[0]) return res.status(401).json({ error: "Session expired" });
-  const session = result.data[0];
-  if (new Date(session.expires_at) < new Date()) return res.status(401).json({ error: "Session expired" });
-  req.user = session.users;
-  req.userId = session.user_id;
-  next();
+
+  try {
+    // Get session
+    const sessionResult = await supabase("GET", "sessions", null, `?token=eq.${token}`);
+    if (!sessionResult.data || !sessionResult.data[0]) {
+      return res.status(401).json({ error: "Session not found" });
+    }
+    const session = sessionResult.data[0];
+    if (new Date(session.expires_at) < new Date()) {
+      return res.status(401).json({ error: "Session expired" });
+    }
+
+    // Get user separately
+    const userResult = await supabase("GET", "users", null, `?id=eq.${session.user_id}`);
+    if (!userResult.data || !userResult.data[0]) {
+      return res.status(401).json({ error: "User not found" });
+    }
+
+    req.user = userResult.data[0];
+    req.userId = session.user_id;
+    next();
+  } catch (e) {
+    console.log("Auth error:", e.message);
+    res.status(401).json({ error: "Auth error: " + e.message });
+  }
 }
 
 app.post("/api/signup", async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) return res.status(400).json({ error: "Email and password required" });
   if (password.length < 6) return res.status(400).json({ error: "Password must be at least 6 characters" });
-
   try {
-    console.log("Signup attempt for:", email);
-    console.log("SUPABASE_URL:", SUPABASE_URL);
-    console.log("SUPABASE_KEY loaded:", !!SUPABASE_KEY);
-
-    const existing = await supabase("GET", "users", null, `?email=eq.${encodeURIComponent(email)}`);
-    console.log("Existing check result:", JSON.stringify(existing.data));
-
-    if (existing.data && existing.data.length > 0) {
-      return res.status(400).json({ error: "Email already registered" });
-    }
-
+    const existing = await supabase("GET", "users", null, `?email=eq.${encodeURIComponent(email.toLowerCase())}`);
+    if (existing.data && existing.data.length > 0) return res.status(400).json({ error: "Email already registered" });
     const userResult = await supabase("POST", "users", {
       email: email.toLowerCase(),
       password_hash: hashPassword(password),
@@ -102,21 +105,15 @@ app.post("/api/signup", async (req, res) => {
       queries_used: 0,
       queries_reset_date: new Date().toISOString().split("T")[0]
     });
-
-    console.log("User creation status:", userResult.status);
-    console.log("User creation data:", JSON.stringify(userResult.data));
-
     if (!userResult.data || !userResult.data[0]) {
-      return res.status(500).json({ error: "Failed to create account - DB error: " + JSON.stringify(userResult.data) });
+      return res.status(500).json({ error: "Failed to create account: " + JSON.stringify(userResult.data) });
     }
-
     const user = userResult.data[0];
     const token = generateToken();
     await supabase("POST", "sessions", { user_id: user.id, token });
-    res.json({ token, email: user.email, plan: user.plan, queriesUsed: user.queries_used });
+    res.json({ token, email: user.email, plan: user.plan, queriesUsed: 0 });
   } catch (e) {
-    console.log("Signup error:", e.message);
-    res.status(500).json({ error: "Server error: " + e.message });
+    res.status(500).json({ error: e.message });
   }
 });
 
@@ -155,12 +152,7 @@ app.get("/api/me", requireAuth, async (req, res) => {
     await supabase("PATCH", "users", { queries_used: 0, queries_reset_date: today }, `?id=eq.${req.userId}`);
     queriesUsed = 0;
   }
-  res.json({
-    email: req.user.email,
-    plan: req.user.plan,
-    queriesUsed,
-    queriesLeft: req.user.plan === "free" ? Math.max(0, FREE_LIMIT - queriesUsed) : 999
-  });
+  res.json({ email: req.user.email, plan: req.user.plan, queriesUsed, queriesLeft: req.user.plan === "free" ? Math.max(0, FREE_LIMIT - queriesUsed) : 999 });
 });
 
 app.post("/api/chat", requireAuth, async (req, res) => {
@@ -188,24 +180,19 @@ app.post("/api/chat", requireAuth, async (req, res) => {
   };
   const request = https.request(options, (response) => {
     let data = "";
-    response.on("data", (chunk) => { data += chunk; });
+    response.on("data", chunk => { data += chunk; });
     response.on("end", () => {
       try { res.json(JSON.parse(data)); }
       catch (e) { res.status(500).json({ error: "Parse error" }); }
     });
   });
-  request.on("error", (e) => res.status(500).json({ error: e.message }));
+  request.on("error", e => res.status(500).json({ error: e.message }));
   request.write(body);
   request.end();
 });
 
 app.get("/api/status", (req, res) => {
-  res.json({
-    status: "running",
-    keyLoaded: !!API_KEY,
-    supabaseUrl: !!SUPABASE_URL,
-    supabaseKey: !!SUPABASE_KEY
-  });
+  res.json({ status: "running", keyLoaded: !!API_KEY, supabaseUrl: !!SUPABASE_URL, supabaseKey: !!SUPABASE_KEY });
 });
 
 app.get("*", (req, res) => {
