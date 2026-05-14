@@ -9,8 +9,6 @@
 body{font-family:'Segoe UI',system-ui,sans-serif;background:#f5f6f7;color:#1a1a1a;}
 #screen-login,#screen-signup,#screen-paywall,#screen-app{width:100%;min-height:100vh;}
 .hidden{display:none!important;}
-
-/* AUTH */
 .auth-bg{background:linear-gradient(135deg,#1a1a1a,#2d1a0a);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
 .auth-box{background:#fff;border-radius:16px;padding:36px 32px;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,0.3);}
 .auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:24px;justify-content:center;}
@@ -27,87 +25,83 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f5f6f7;color:#1a1a1
 .auth-error{background:#fff0eb;border:1px solid #ffb899;color:#cc3300;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:12px;}
 .free-badge{background:#f5f5f5;border-radius:8px;padding:10px 14px;font-size:12px;color:#666;text-align:center;margin-bottom:16px;}
 .free-badge strong{color:#e65c00;}
-
-/* APP */
 #screen-app{display:flex;flex-direction:column;height:100vh;}
-#hdr{background:#fff;border-bottom:3px solid #e65c00;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,0.07);}
+#hdr{background:#fff;border-bottom:3px solid #e65c00;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,0.07);}
 #hdr-left{display:flex;align-items:center;gap:10px;}
-#hdr-icon{width:36px;height:36px;background:#e65c00;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;}
-#hdr-title{font-size:16px;font-weight:800;}
-#hdr-sub{font-size:10px;color:#999;}
-#hdr-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
-#qbadge{background:#fff8f5;border:1px solid #e65c00;border-radius:20px;padding:4px 12px;font-size:12px;color:#e65c00;font-weight:600;}
-#uemail{font-size:11px;color:#888;}
-.hbtn{border-radius:8px;padding:5px 12px;font-size:11px;cursor:pointer;font-family:inherit;border:1px solid #ddd;background:#f0f0f0;color:#666;}
-#ubtn{background:#e65c00;color:#fff;border:none;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;}
+#hdr-icon{width:34px;height:34px;background:#e65c00;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;transition:background 0.3s;}
+#hdr-title{font-size:15px;font-weight:800;}
+#hdr-sub{font-size:9px;color:#999;}
+#hdr-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
+#qbadge{background:#fff8f5;border:1px solid #e65c00;border-radius:20px;padding:3px 10px;font-size:11px;color:#e65c00;font-weight:600;}
+#uemail{font-size:10px;color:#888;}
+.hbtn{border-radius:8px;padding:4px 10px;font-size:10px;cursor:pointer;font-family:inherit;border:1px solid #ddd;background:#f0f0f0;color:#666;}
+#ubtn{background:#e65c00;color:#fff;border:none;border-radius:20px;padding:5px 12px;font-size:11px;font-weight:700;cursor:pointer;}
 
-/* CATS */
-#cats{background:#fff;border-bottom:1px solid #ebebeb;padding:8px 16px;overflow-x:auto;flex-shrink:0;}
-#catrow{display:flex;gap:8px;min-width:max-content;}
-.cbt{border-radius:20px;padding:5px 12px;font-size:11px;cursor:pointer;border:1px solid #e5e5e5;background:#f5f5f5;color:#555;font-family:inherit;white-space:nowrap;}
+/* DROPDOWN SELECTOR */
+#selector{background:#fff;border-bottom:1px solid #ebebeb;padding:8px 16px;flex-shrink:0;display:flex;align-items:center;gap:10px;}
+#selector-label{font-size:11px;font-weight:700;color:#888;white-space:nowrap;letter-spacing:0.5px;text-transform:uppercase;}
+#cat-select-wrap{position:relative;flex:1;max-width:420px;}
+#cat-select{width:100%;padding:8px 36px 8px 12px;border:1.5px solid #e5e5e5;border-radius:10px;font-size:13px;font-family:inherit;font-weight:600;color:#1a1a1a;background:#f8f8f8;appearance:none;-webkit-appearance:none;cursor:pointer;outline:none;}
+#cat-select:focus{border-color:#e65c00;}
+.select-arrow{position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:10px;color:#888;}
+#subcat-wrap{flex:1;max-width:280px;position:relative;}
+#subcat-select{width:100%;padding:8px 36px 8px 12px;border:1.5px solid #e5e5e5;border-radius:10px;font-size:12px;font-family:inherit;font-weight:500;color:#555;background:#f8f8f8;appearance:none;-webkit-appearance:none;cursor:pointer;outline:none;}
+#subcat-select:focus{border-color:#e65c00;}
 
-/* MAIN */
 #main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
-#empty{flex:1;overflow-y:auto;padding:20px;}
-#hero{text-align:center;margin-bottom:20px;}
-#hicon{width:56px;height:56px;background:#e65c0018;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 10px;}
-#htitle{font-size:18px;font-weight:800;margin-bottom:4px;}
-#hsub{font-size:12px;color:#888;}
-#pgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:580px;margin:0 auto 16px;}
-.pbt{background:#fff;border:1.5px solid #ebebeb;color:#333;padding:11px 13px;text-align:left;cursor:pointer;font-size:12px;font-family:inherit;line-height:1.4;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,0.05);}
-.plbl{display:block;font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:3px;}
-#fnotice{max-width:580px;margin:0 auto;background:#fff8f5;border:1px solid #ffd5b8;border-radius:10px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
-#fntxt{font-size:12px;font-weight:700;color:#e65c00;}
-#fnsub{font-size:11px;color:#888;}
-.fnbtn{background:#e65c00;color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;}
-
-/* CHAT */
-#chat{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:12px;}
-.mrow{display:flex;gap:8px;align-items:flex-start;}
+#empty{flex:1;overflow-y:auto;padding:16px;}
+#hero{text-align:center;margin-bottom:16px;}
+#hicon{width:56px;height:56px;background:#e65c0018;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 10px;transition:background 0.3s;}
+#htitle{font-size:17px;font-weight:800;margin-bottom:3px;}
+#hsub{font-size:11px;color:#888;}
+#pgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;max-width:600px;margin:0 auto 14px;}
+.pbt{background:#fff;border:1.5px solid #ebebeb;color:#333;padding:10px 12px;text-align:left;cursor:pointer;font-size:11px;font-family:inherit;line-height:1.4;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,0.05);transition:all 0.15s;}
+.plbl{display:block;font-size:8px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:3px;}
+#fnotice{max-width:600px;margin:0 auto;background:#fff8f5;border:1px solid #ffd5b8;border-radius:10px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+#fntxt{font-size:11px;font-weight:700;color:#e65c00;}
+#fnsub{font-size:10px;color:#888;}
+.fnbtn{background:#e65c00;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;}
+#chat{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px;}
+.mrow{display:flex;gap:7px;align-items:flex-start;}
 .mrow.user{flex-direction:row-reverse;}
-.mav{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-top:2px;}
+.mav{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:2px;}
 .mav.ai{background:#e65c00;}
 .mav.user{background:#1a1a1a;}
-.mbub{max-width:78%;padding:10px 14px;font-size:13px;line-height:1.75;box-shadow:0 1px 3px rgba(0,0,0,0.06);}
-.mbub.ai{background:#fff;border:1px solid #ebebeb;border-radius:4px 14px 14px 14px;color:#1a1a1a;}
-.mbub.user{background:#1a1a1a;border-radius:14px 4px 14px 14px;color:#fff;}
-.tdots{display:flex;gap:4px;padding:12px 14px;background:#fff;border:1px solid #ebebeb;border-radius:4px 14px 14px 14px;}
-.dot{width:7px;height:7px;background:#e65c00;border-radius:50%;animation:bounce 1s ease-in-out infinite;}
+.mbub{max-width:80%;padding:9px 13px;font-size:12px;line-height:1.75;box-shadow:0 1px 3px rgba(0,0,0,0.06);}
+.mbub.ai{background:#fff;border:1px solid #ebebeb;border-radius:3px 13px 13px 13px;color:#1a1a1a;}
+.mbub.user{background:#1a1a1a;border-radius:13px 3px 13px 13px;color:#fff;}
+.tdots{display:flex;gap:4px;padding:11px 13px;background:#fff;border:1px solid #ebebeb;border-radius:3px 13px 13px 13px;}
+.dot{width:6px;height:6px;background:#e65c00;border-radius:50%;animation:bounce 1s ease-in-out infinite;}
 .dot:nth-child(2){animation-delay:.18s;}
 .dot:nth-child(3){animation-delay:.36s;}
-
-/* INPUT */
-#ibar{background:#fff;border-top:1px solid #ebebeb;padding:12px 20px;flex-shrink:0;}
-#iwrap{display:flex;gap:8px;align-items:flex-end;max-width:860px;margin:0 auto;}
-#minput{flex:1;background:#f8f8f8;border:1.5px solid #e5e5e5;color:#1a1a1a;padding:9px 13px;font-size:13px;font-family:inherit;resize:none;outline:none;line-height:1.5;border-radius:10px;}
+#ibar{background:#fff;border-top:1px solid #ebebeb;padding:10px 16px;flex-shrink:0;}
+#iwrap{display:flex;gap:7px;align-items:flex-end;max-width:860px;margin:0 auto;}
+#minput{flex:1;background:#f8f8f8;border:1.5px solid #e5e5e5;color:#1a1a1a;padding:8px 12px;font-size:12px;font-family:inherit;resize:none;outline:none;line-height:1.5;border-radius:10px;}
 #minput:focus{border-color:#e65c00;}
-#sbtn{background:#e65c00;color:#fff;border:none;padding:0 20px;height:52px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;white-space:nowrap;}
+#sbtn{background:#e65c00;color:#fff;border:none;padding:0 18px;height:48px;font-size:12px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;white-space:nowrap;}
 #sbtn:disabled{background:#e5e5e5;color:#aaa;cursor:not-allowed;}
-#ihint{font-size:10px;color:#ccc;margin-top:5px;text-align:center;}
-
-/* PAYWALL */
+#ihint{font-size:9px;color:#ccc;margin-top:4px;text-align:center;}
 #screen-paywall{background:linear-gradient(135deg,#0a0a0a,#1a1a2e);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
-#pw-icon{width:50px;height:50px;background:#e65c00;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:14px;}
-#pw-title{font-size:24px;font-weight:800;color:#fff;margin-bottom:6px;text-align:center;}
-#pw-sub{font-size:14px;color:#aaa;margin-bottom:32px;text-align:center;max-width:400px;}
+#pw-icon{width:48px;height:48px;background:#e65c00;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px;}
+#pw-title{font-size:22px;font-weight:800;color:#fff;margin-bottom:6px;text-align:center;}
+#pw-sub{font-size:13px;color:#aaa;margin-bottom:28px;text-align:center;max-width:380px;}
 #plans{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;max-width:520px;width:100%;}
-.pc{background:#1a1a1a;border:2px solid #333;border-radius:14px;padding:24px 20px;flex:1;min-width:190px;max-width:230px;position:relative;}
+.pc{background:#1a1a1a;border:2px solid #333;border-radius:14px;padding:22px 18px;flex:1;min-width:180px;max-width:220px;position:relative;}
 .pc.hi{background:#e65c00;border-color:#e65c00;box-shadow:0 8px 28px rgba(230,92,0,.4);}
-.pbadge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#fff;color:#e65c00;font-size:10px;font-weight:800;padding:3px 10px;border-radius:20px;white-space:nowrap;}
-.pname{font-size:15px;font-weight:700;color:#ccc;margin-bottom:5px;}
+.pbadge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#fff;color:#e65c00;font-size:9px;font-weight:800;padding:3px 10px;border-radius:20px;white-space:nowrap;}
+.pname{font-size:14px;font-weight:700;color:#ccc;margin-bottom:4px;}
 .pc.hi .pname{color:#fff;}
-.pprice{font-size:30px;font-weight:800;color:#fff;}
-.pper{font-size:13px;font-weight:400;color:#666;}
+.pprice{font-size:28px;font-weight:900;color:#fff;}
+.pper{font-size:12px;font-weight:400;color:#666;}
 .pc.hi .pper{color:rgba(255,255,255,.7);}
-.pdiv{height:1px;background:#333;margin:14px 0;}
+.pdiv{height:1px;background:#333;margin:12px 0;}
 .pc.hi .pdiv{background:rgba(255,255,255,.2);}
-.pf{display:flex;gap:7px;margin-bottom:7px;font-size:12px;color:#aaa;}
+.pf{display:flex;gap:7px;margin-bottom:6px;font-size:11px;color:#aaa;}
 .pc.hi .pf{color:#fff;}
 .pck{color:#e65c00;}
 .pc.hi .pck{color:#fff;}
-.pbtn{margin-top:18px;width:100%;padding:11px;border-radius:9px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
-#pw-back{margin-top:20px;background:none;border:none;color:#555;font-size:12px;cursor:pointer;font-family:inherit;}
-
+.pbtn{margin-top:16px;width:100%;padding:10px;border-radius:9px;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+#pw-back{margin-top:18px;background:none;border:none;color:#555;font-size:12px;cursor:pointer;font-family:inherit;}
 .step{display:flex;gap:8px;margin:5px 0;align-items:flex-start;}
 .snum{background:#f0f0f0;color:#333;font-weight:700;min-width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;}
 .bul{margin:3px 0;padding-left:4px;color:#444;}
@@ -120,7 +114,6 @@ strong{font-weight:700;}
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="screen-login" class="hidden">
   <div class="auth-bg">
     <div class="auth-box">
@@ -136,14 +129,13 @@ strong{font-weight:700;}
   </div>
 </div>
 
-<!-- SIGNUP -->
 <div id="screen-signup" class="hidden">
   <div class="auth-bg">
     <div class="auth-box">
       <div class="auth-logo"><div class="auth-logo-icon">⚙️</div><div class="auth-logo-text">FieldFix AI</div></div>
       <div class="auth-title">Create account</div>
       <div class="auth-sub">Start troubleshooting smarter</div>
-      <div class="free-badge">✅ Free plan — <strong>3 queries/day</strong> — no credit card</div>
+      <div class="free-badge">✅ Free — <strong>3 queries/day</strong> — no credit card</div>
       <div id="serr" class="auth-error hidden"></div>
       <input type="email" id="semail" class="auth-input" placeholder="Email address"/>
       <input type="password" id="spass" class="auth-input" placeholder="Password (min 6 chars)"/>
@@ -153,15 +145,13 @@ strong{font-weight:700;}
   </div>
 </div>
 
-<!-- PAYWALL -->
 <div id="screen-paywall" class="hidden">
   <div id="pw-icon">⚙️</div>
   <div id="pw-title">3 free queries used</div>
-  <div id="pw-sub">Upgrade to Pro for unlimited troubleshooting.</div>
+  <div id="pw-sub">Upgrade to Pro for unlimited troubleshooting — less than the cost of one hour of downtime.</div>
   <div id="plans">
     <div class="pc">
-      <div class="pname">Free</div>
-      <div class="pprice">$0</div>
+      <div class="pname">Free</div><div class="pprice">$0</div>
       <div class="pdiv"></div>
       <div class="pf"><span class="pck">✓</span>3 queries/day</div>
       <div class="pf"><span class="pck">✓</span>All equipment types</div>
@@ -169,8 +159,7 @@ strong{font-weight:700;}
     </div>
     <div class="pc hi">
       <div class="pbadge">MOST POPULAR</div>
-      <div class="pname">Pro</div>
-      <div class="pprice">$9.99<span class="pper">/mo</span></div>
+      <div class="pname">Pro</div><div class="pprice">$9.99<span class="pper">/mo</span></div>
       <div class="pdiv"></div>
       <div class="pf"><span class="pck">✓</span>Unlimited queries</div>
       <div class="pf"><span class="pck">✓</span>Save history</div>
@@ -182,12 +171,11 @@ strong{font-weight:700;}
   <button id="pw-back" onclick="goApp()">← Back to app</button>
 </div>
 
-<!-- APP -->
 <div id="screen-app" class="hidden">
   <div id="hdr">
     <div id="hdr-left">
       <div id="hdr-icon">⚙️</div>
-      <div><div id="hdr-title">FieldFix AI</div><div id="hdr-sub">Industrial Troubleshooting</div></div>
+      <div><div id="hdr-title">FieldFix AI</div><div id="hdr-sub">Industrial Troubleshooting Assistant</div></div>
     </div>
     <div id="hdr-right">
       <div id="uemail"></div>
@@ -198,14 +186,65 @@ strong{font-weight:700;}
     </div>
   </div>
 
-  <div id="cats"><div id="catrow"></div></div>
+  <!-- DROPDOWN SELECTOR -->
+  <div id="selector">
+    <div id="selector-label">Category</div>
+    <div id="cat-select-wrap">
+      <select id="cat-select" onchange="onCatChange()">
+        <optgroup label="🔧 Fanuc">
+          <option value="fanuc-cnc">Fanuc CNC Controllers</option>
+          <option value="fanuc-robot">Fanuc Robots</option>
+        </optgroup>
+        <optgroup label="⚡ Siemens">
+          <option value="siemens-cnc">Siemens Sinumerik CNC</option>
+          <option value="siemens-plc">Siemens S7 PLC</option>
+          <option value="siemens-hmi">Siemens HMI Panels</option>
+        </optgroup>
+        <optgroup label="📡 Allen-Bradley">
+          <option value="ab-plc">Allen-Bradley PLC</option>
+          <option value="ab-drives">Allen-Bradley Drives</option>
+        </optgroup>
+        <optgroup label="🏭 Other CNC">
+          <option value="mitsubishi-cnc">Mitsubishi CNC</option>
+          <option value="mazak">Mazak CNC (Mazatrol)</option>
+          <option value="haas">Haas CNC</option>
+          <option value="okuma">Okuma CNC (OSP)</option>
+        </optgroup>
+        <optgroup label="🖥️ Other PLC">
+          <option value="mitsubishi-plc">Mitsubishi PLC</option>
+          <option value="omron">Omron PLC</option>
+        </optgroup>
+        <optgroup label="📥 I/O Diagnostics">
+          <option value="inputs">Discrete Inputs</option>
+          <option value="outputs">Discrete Outputs</option>
+          <option value="analog">Analog I/O (4-20mA, RTD, TC)</option>
+        </optgroup>
+        <optgroup label="⚙️ Mechanical Systems">
+          <option value="hydraulics">Hydraulics</option>
+          <option value="pneumatics">Pneumatics</option>
+          <option value="conveyors">Conveyors</option>
+          <option value="compressors">Compressors</option>
+        </optgroup>
+        <optgroup label="⚡ Electrical">
+          <option value="electrical">Control Circuits (24V/120V)</option>
+          <option value="motors">Motors &amp; Starters</option>
+          <option value="drives">VFD &amp; Servo Drives</option>
+          <option value="safety">Safety Systems</option>
+        </optgroup>
+        <optgroup label="🔥 Welding">
+          <option value="welding">Welding Equipment</option>
+        </optgroup>
+      </select>
+      <span class="select-arrow">▼</span>
+    </div>
+  </div>
 
   <div id="main">
     <div id="empty">
       <div id="hero">
         <div id="hicon">🔧</div>
         <div id="htitle">Fanuc CNC Troubleshooter</div>
-        <div id="hsub">Tap a common fault or type your alarm code below</div>
+        <div id="hsub">Select a quick fault below or type your alarm code</div>
       </div>
       <div id="pgrid"></div>
       <div id="fnotice">
@@ -218,49 +257,135 @@ strong{font-weight:700;}
 
   <div id="ibar">
     <div id="iwrap">
-      <textarea id="minput" rows="2" placeholder="Type alarm code or describe fault..."></textarea>
+      <textarea id="minput" rows="2" placeholder="Type alarm code or describe your fault..."></textarea>
       <button id="sbtn" onclick="send()">Send →</button>
     </div>
-    <div id="ihint">Fanuc · Siemens · Allen-Bradley · I/O · Analog · Drives</div>
+    <div id="ihint">Fanuc · Siemens · Allen-Bradley · Mitsubishi · Mazak · Haas · Okuma · Hydraulics · Pneumatics · Motors · Safety · Welding</div>
   </div>
 </div>
 
 <script>
-const SYS = `You are an expert industrial maintenance troubleshooting assistant with deep knowledge in Fanuc CNC, Fanuc robots, Siemens Sinumerik, Siemens S7 PLC, Allen-Bradley PLC, discrete I/O diagnostics, analog signals (4-20mA, RTD, thermocouple), and drives. Give root causes, screen navigation, step-by-step troubleshooting with test points and meter settings, tools needed, safety precautions, and repair time. Be direct and field-accurate.`;
+const SYS = `You are an expert industrial maintenance troubleshooting assistant with deep hands-on knowledge across ALL major industrial platforms:
 
-const CATS=[
-  {key:"fanuc cnc",label:"Fanuc CNC",icon:"🔧",color:"#e65c00"},
-  {key:"fanuc robot",label:"Fanuc Robot",icon:"🦾",color:"#e65c00"},
-  {key:"siemens cnc",label:"Siemens CNC",icon:"⚡",color:"#0078d4"},
-  {key:"siemens plc",label:"Siemens PLC",icon:"🖥️",color:"#0078d4"},
-  {key:"plc",label:"Allen-Bradley",icon:"📡",color:"#cc0000"},
-  {key:"inputs",label:"Inputs",icon:"📥",color:"#107c10"},
-  {key:"outputs",label:"Outputs",icon:"📤",color:"#107c10"},
-  {key:"analog",label:"Analog I/O",icon:"📊",color:"#6b3fa0"},
-  {key:"electrical",label:"Electrical",icon:"🔌",color:"#b8860b"},
-  {key:"drives",label:"Drives",icon:"⚙️",color:"#555"},
-];
+FANUC CNC: Series 0, 0i, 16, 18, 21, 30i, 31i, 32i — servo alarms (SV), spindle alarms (SP), PMC alarms, overtravel (OT), system alarms. Screen navigation: diagnostic pages, servo tuning, PMC ladder monitor, wave diagnostic, I/O status.
 
-const PROMPTS={
-  "fanuc cnc":["Fanuc SV0023 X axis servo alarm","Fanuc SP9030 spindle fault","Fanuc OT0506 overtravel alarm","Fanuc PMC alarm 1000"],
-  "fanuc robot":["SRVO-068 DTERR joint 3","SRVO-023 DCAL high speed","SYST-034 HOT STANDBY","Lost mastering on J2"],
-  "siemens cnc":["Sinumerik 840D alarm 25201","Sinamics F07900 spindle drive","Safety Integrated alarm 27001","840D servo diagnostic screen nav"],
-  "siemens plc":["S7-300 SF and BF lights","Profibus OB86 dropout","TIA Portal S7-1500 online monitor","Q4.0 TRUE device not activating"],
-  "plc":["ControlLogix fault code 4 type 1","Kinetix 6000 F007 axis fault","Mitsubishi SP.UNIT DOWN","Safely force PLC output"],
-  "inputs":["NPN prox LED on PLC bit off","Input ON no device triggering","Photoelectric false trips","Limit switch drops intermittently"],
-  "outputs":["24VDC at terminal solenoid won't fire","Output LED on 0V at terminal","120VAC contactor won't pull in","Relay contacts welded after overload"],
-  "analog":["4-20mA wrong PLC reading","Analog below 4mA loop powered","Type J TC reads room temp","PT100 RTD reads 20 degrees high"],
-  "electrical":["24VDC relay won't pull in","Intermittent E-stop no pattern","GFCI trips on spindle start","Encoder signal following error"],
-  "drives":["Sinamics G120 F00011 overcurrent","PowerFlex 755 fault 12","DC bus overvoltage deceleration","Encoder feedback loss after swap"],
+FANUC ROBOTS: R-2000, M-10, M-20, LR Mate, M-710, ARC Mate — SRVO, SYST, INTP, MOTN, PRIO alarms. Mastering, teach pendant navigation, I/O monitor, joint diagnostics.
+
+SIEMENS SINUMERIK: 808D, 828D, 840D sl/pl — alarm codes (1xxxx NC, 2xxxx PLC, 3xxxx drive), Sinamics F/A codes, Safety Integrated (STO, SS1, SS2). Screen navigation: Diagnostics menu, Service menu, drive IBN, axis diagnostics.
+
+SIEMENS S7 PLC: S7-200, S7-300, S7-400, S7-1200, S7-1500 — OB82/83/86 diagnostics, SF/BF LEDs, TIA Portal online monitoring, Profibus/Profinet faults, module errors.
+
+SIEMENS HMI: TP/KTP Comfort/Basic panels — alarm views, system alarms, HMI diagnostics.
+
+ALLEN-BRADLEY PLC: MicroLogix, SLC500, PLC-5, ControlLogix, CompactLogix — major/minor faults, I/O tree faults, RSLogix/Studio 5000 online diagnostics, task faults.
+
+ALLEN-BRADLEY DRIVES: Kinetix 300/350/5500/6000/6500 servo drives — fault codes, axis inhibit, feedback faults. PowerFlex 4/40/400/525/755 VFDs — fault codes, parameter navigation.
+
+MITSUBISHI CNC: M70, M80, M700, M800 series — alarm codes, servo/spindle diagnostics, MDS drive faults, screen navigation, parameter access, tool life management alarms.
+
+MITSUBISHI PLC: Q-series, iQ-R, iQ-F (FX3/FX5) — GX Works2/3 diagnostics, CC-Link/CC-Link IE faults, module error codes, special function module diagnostics.
+
+MAZAK CNC: Mazatrol Matrix Nexus, Smooth X/G/C, Fusion 640 — alarm codes, EIA/ISO mode, servo diagnostics, maintenance screens, ATC/APC faults, spindle diagnostics.
+
+HAAS CNC: Standard HAAS control (all mills and lathes) — alarm codes, diagnostics menu, current commands page, parameter access (Setting 7/8), servo/spindle faults, tool changer alarms.
+
+OKUMA CNC: OSP-P300S, OSP-P200L, OSP-P100 — alarm messages, THINC-OSP diagnostics, servo and spindle fault isolation, maintenance mode navigation, alarm history.
+
+DISCRETE INPUTS: NPN/PNP wiring, proximity sensors (inductive/capacitive), photoelectrics, limit switches — testing with multimeter, LED vs bit discrepancy, expected voltages (18-30VDC on, <3VDC off).
+
+DISCRETE OUTPUTS: Transistor outputs, relay outputs — solenoid coil resistance (20-100 ohm for 24VDC), contactor diagnosis, blown transistor symptoms, welded contacts.
+
+ANALOG I/O: 4-20mA loop testing (break loop, insert clamp meter), thermocouple mV values, RTD resistance tables (PT100: 100Ω@0C, 138Ω@100C, 175Ω@200C), ground loops, scaling errors.
+
+HYDRAULICS: Gear/vane/piston pumps — cavitation, contamination, pressure relief valve settings, directional control valve solenoid testing, cylinder drift diagnosis, accumulator precharge, flow control, pressure switches. Hydraulic fluid contamination diagnosis, filter bypass indicators, heat exchanger issues.
+
+PNEUMATICS: Air compressors, FRL units (filter/regulator/lubricator), directional solenoid valves, cylinders, flow controls — pressure drop diagnosis, solenoid coil testing, cylinder seal leaks, pressure switch calibration, air dryer faults, moisture contamination.
+
+CONVEYORS: Belt conveyors — belt tracking, drive pulley slip, belt tension, splice failures. Roller conveyors — drive chain tension, roller bearing failures. Chain conveyors — chain stretch, sprocket wear, lubrication issues. VFD-driven conveyors — speed reference, overload faults. Conveyor safety — zero-speed switches, pull cord E-stops, belt sway switches.
+
+COMPRESSORS: Reciprocating, rotary screw, centrifugal air compressors — high temp shutdown, low pressure faults, unloader valve issues, check valve failures, oil separator issues, air/oil separator differential pressure, intercooler faults, pressure switch calibration, safety relief valves.
+
+MOTORS & STARTERS: AC induction motors — bearing noise, winding resistance measurement, insulation resistance testing (megohm test), single phasing diagnosis. Soft starters — bypass contactor faults, current limit settings, ramp time adjustment. Motor starters — overload sizing, OL reset, heater sizing.
+
+VFD & SERVO DRIVES: VFD overcurrent/overvoltage/undervoltage faults, DC bus diagnosis, ground fault isolation, motor parameter autotune, braking resistor sizing. Servo drives — following error, encoder feedback loss, regeneration faults, bus voltage monitoring.
+
+SAFETY SYSTEMS: E-stop circuits — dual channel monitoring, contact checking, reset conditions. Light curtains — alignment, muting, bypass conditions, safety relay diagnostics. Safety PLCs (Pilz, Sick, Rockwell) — safety function testing, SIL level, proof test intervals. Two-hand controls, safety mats, door interlocks — wiring and testing.
+
+CONTROL CIRCUITS: 24VDC and 120VAC control circuits — relay logic, voltage drop testing, coil resistance, contact bounce. Transformer secondary voltage checks, fuse sizing, circuit breaker coordination.
+
+WELDING EQUIPMENT: MIG/GMAW — wire feed issues, contact tip wear, gas flow, porosity causes, spatter reduction. TIG/GTAW — tungsten contamination, gas coverage, high frequency start faults, water-cooled torch issues. Spot welding — electrode force, weld time, current settings, electrode wear, water cooling faults. Welding power source faults — thermal shutdown, duty cycle, wire feed motor faults.
+
+When a technician describes a problem:
+1. Identify the equipment type and fault
+2. Give root causes with confidence level (High/Medium/Low)
+3. Provide exact screen navigation or diagnostic location
+4. Give step-by-step procedure with test points, meter settings, and expected values
+5. List tools needed
+6. State safety precautions
+7. Note common mistakes
+8. Give realistic repair time estimate
+
+Be direct. Use field-accurate terminology. No disclaimers. You are talking to experienced technicians.`;
+
+const CATS = {
+  "fanuc-cnc":       {label:"Fanuc CNC Controllers",       icon:"🔧", color:"#e65c00",
+    prompts:["Fanuc SV0023 X axis servo alarm","Fanuc SP9030 spindle fault won't start","Fanuc OT0506 overtravel alarm during run","Fanuc PMC alarm 1000 — find rung causing it"]},
+  "fanuc-robot":     {label:"Fanuc Robots",                icon:"🦾", color:"#e65c00",
+    prompts:["SRVO-068 DTERR alarm on joint 3","SRVO-023 DCAL alarm at high speed","SYST-034 HOT STANDBY after power cycle","Lost mastering on J2 no witness marks"]},
+  "siemens-cnc":     {label:"Siemens Sinumerik CNC",       icon:"⚡", color:"#0078d4",
+    prompts:["Sinumerik 840D alarm 25201 axis won't enable","Sinamics F07900 spindle drive fault","Safety Integrated alarm 27001 triggered","How to reach servo diagnostic screen 840D"]},
+  "siemens-plc":     {label:"Siemens S7 PLC",              icon:"🖥️", color:"#0078d4",
+    prompts:["S7-300 SF and BF lights on CPU","Profibus OB86 remote rack dropped off","TIA Portal go online S7-1500 monitor bits","Q4.0 shows TRUE but output device not firing"]},
+  "siemens-hmi":     {label:"Siemens HMI Panels",          icon:"📱", color:"#0078d4",
+    prompts:["HMI TP900 not connecting to PLC","Siemens KTP700 alarm view not updating","HMI recipe download failing","Comfort panel system alarm 070302"]},
+  "ab-plc":          {label:"Allen-Bradley PLC",           icon:"📡", color:"#cc0000",
+    prompts:["ControlLogix major fault code 4 type 1","CompactLogix I/O module communication fault","Safely force output Studio 5000 for testing","SLC500 processor fault red LED solid"]},
+  "ab-drives":       {label:"Allen-Bradley Drives",        icon:"🔋", color:"#cc0000",
+    prompts:["Kinetix 6000 F007 drive fault axis 2","PowerFlex 755 fault 12 HW overcurrent","PowerFlex 525 F059 encoder loss fault","Kinetix axis won't enable — inhibit active"]},
+  "mitsubishi-cnc":  {label:"Mitsubishi CNC",              icon:"🏭", color:"#d32f2f",
+    prompts:["Mitsubishi M80 servo alarm Z axis","MDS-D drive fault code E1 spindle","M800 alarm Y01 parameter error","Mitsubishi CNC emergency stop won't reset"]},
+  "mazak":           {label:"Mazak CNC (Mazatrol)",        icon:"⚙️", color:"#424242",
+    prompts:["Mazak alarm 101 Z axis servo fault","Mazatrol ATC arm not cycling — alarm","Mazak spindle orientation fault alarm","Smooth control program not loading — alarm"]},
+  "haas":            {label:"Haas CNC",                    icon:"🔩", color:"#1565c0",
+    prompts:["Haas alarm 132 servo overload X axis","Haas tool changer alarm — carousel stuck","Haas spindle drive fault alarm 263","Haas parameter 57 — what does it control"]},
+  "okuma":           {label:"Okuma CNC (OSP)",             icon:"🎯", color:"#2e7d32",
+    prompts:["Okuma alarm 1006 servo X axis","OSP-P300 spindle fault code diagnosis","Okuma ATC fault — tool change stopped","OSP control backup procedure — how to"]},
+  "mitsubishi-plc":  {label:"Mitsubishi PLC",              icon:"🔲", color:"#b71c1c",
+    prompts:["Mitsubishi Q-series SP.UNIT DOWN error","iQ-R CPU error LED — find fault module","CC-Link communication error station dropout","FX5 PLC output not turning on — troubleshoot"]},
+  "omron":           {label:"Omron PLC",                   icon:"🔷", color:"#00695c",
+    prompts:["Omron CJ2 I/O verification error","Omron NX1P2 EtherCAT slave dropout","Omron NS HMI not connecting to PLC","CX-Programmer go online and monitor bits"]},
+  "inputs":          {label:"Discrete Inputs",             icon:"📥", color:"#107c10",
+    prompts:["NPN prox sensor LED on PLC bit off","Input ON with no device triggering it","Retroreflective photoelectric false trips","Limit switch drops intermittently during cycle"]},
+  "outputs":         {label:"Discrete Outputs",            icon:"📤", color:"#107c10",
+    prompts:["24VDC at terminal solenoid won't fire","Output LED on but 0V at terminal","120VAC at contactor coil won't pull in","Relay output contacts welded after overload"]},
+  "analog":          {label:"Analog I/O (4-20mA, RTD, TC)", icon:"📊", color:"#6b3fa0",
+    prompts:["4-20mA transmitter wrong PLC reading","Analog loop reading below 4mA — loop powered","Type J thermocouple reads room temp when hot","PT100 RTD reading 20 degrees too high"]},
+  "hydraulics":      {label:"Hydraulics",                  icon:"💧", color:"#01579b",
+    prompts:["Hydraulic pump cavitation — loud noise low pressure","Hydraulic cylinder drifting under load","Directional control valve solenoid won't shift","Hydraulic system overheating — heat exchanger"]},
+  "pneumatics":      {label:"Pneumatics",                  icon:"💨", color:"#0288d1",
+    prompts:["Pneumatic cylinder not extending fully","Air pressure drops when solenoid fires","FRL regulator won't hold set pressure","Air system moisture — water in lines"]},
+  "conveyors":       {label:"Conveyors",                   icon:"📦", color:"#f57f17",
+    prompts:["Belt conveyor tracking off to one side","Conveyor belt slipping on drive pulley","Chain conveyor jumping off sprocket","Conveyor VFD overload tripping at full load"]},
+  "compressors":     {label:"Compressors",                 icon:"🌀", color:"#4527a0",
+    prompts:["Rotary screw compressor high temp shutdown","Compressor unloading but pressure drops fast","Air compressor check valve blowing back","Screw compressor oil in air lines — separator"]},
+  "electrical":      {label:"Control Circuits (24V/120V)", icon:"🔌", color:"#b8860b",
+    prompts:["24VDC relay coil has voltage won't pull in","Intermittent E-stop fault no pattern","GFCI trips when spindle motor starts","Control transformer primary fuse keeps blowing"]},
+  "motors":          {label:"Motors & Starters",           icon:"🔄", color:"#37474f",
+    prompts:["Motor running hot — bearing or winding issue","Soft starter current limit fault on start","Motor overload tripping — not overloaded","Single phase condition — motor humming won't start"]},
+  "drives":          {label:"VFD & Servo Drives",          icon:"⚡", color:"#555",
+    prompts:["VFD overcurrent fault on motor start","DC bus overvoltage during deceleration","Servo drive encoder feedback loss fault","VFD ground fault — isolate to motor or cable"]},
+  "safety":          {label:"Safety Systems",              icon:"🛡️", color:"#c62828",
+    prompts:["E-stop circuit won't reset — all guards closed","Light curtain fault — beam alignment good","Safety relay not resetting after E-stop clear","Door interlock switch — machine won't enable"]},
+  "welding":         {label:"Welding Equipment",           icon:"🔥", color:"#e65100",
+    prompts:["MIG welder porosity in welds — gas or wire issue","Wire feed motor running slow — erratic feed","Spot welder not hitting target weld current","TIG high frequency start not firing arc"]},
 };
 
-let cat="fanuc cnc", msgs=[], token=localStorage.getItem("ff_tok"), user=null;
+let cat = "fanuc-cnc";
+let msgs = [], token = localStorage.getItem("ff_tok"), user = null;
 
 function show(id){
   ["screen-login","screen-signup","screen-paywall","screen-app"].forEach(s=>{
-    const el=document.getElementById(s);
-    if(s===id){el.classList.remove("hidden");}
-    else{el.classList.add("hidden");}
+    document.getElementById(s)[s===id?"classList":"classList"][s===id?"remove":"add"]("hidden");
   });
 }
 
@@ -328,35 +453,33 @@ async function checkSession(){
     user=await r.json();
     updateUI();
     goApp();
+    buildPrompts();
   }catch(e){goLogin();}
 }
 
-function buildCats(){
-  const row=document.getElementById("catrow");
-  row.innerHTML="";
-  CATS.forEach(c=>{
-    const b=document.createElement("button");
-    b.className="cbt";
-    b.innerHTML=c.icon+" "+c.label;
-    if(c.key===cat){b.style.background=c.color;b.style.color="#fff";b.style.borderColor=c.color;b.style.fontWeight="700";}
-    b.onclick=()=>{cat=c.key;buildCats();buildPrompts();
-      document.getElementById("hicon").textContent=c.icon;
-      document.getElementById("htitle").textContent=c.label+" Troubleshooter";
-      document.getElementById("hdr").style.borderBottomColor=c.color;
-      document.getElementById("hdr-icon").style.background=c.color;
-    };
-    row.appendChild(b);
-  });
+function onCatChange(){
+  cat=document.getElementById("cat-select").value;
+  const c=CATS[cat];
+  document.getElementById("hicon").textContent=c.icon;
+  document.getElementById("hicon").style.background=c.color+"18";
+  document.getElementById("htitle").textContent=c.label;
+  document.getElementById("hdr").style.borderBottomColor=c.color;
+  document.getElementById("hdr-icon").style.background=c.color;
+  document.getElementById("cat-select").style.borderColor=c.color;
+  buildPrompts();
+  // if in chat, don't reset
 }
 
 function buildPrompts(){
+  const c=CATS[cat];
   const grid=document.getElementById("pgrid");
-  const c=CATS.find(x=>x.key===cat);
   grid.innerHTML="";
-  (PROMPTS[cat]||[]).forEach(p=>{
+  (c.prompts||[]).forEach(p=>{
     const b=document.createElement("button");
     b.className="pbt";
     b.innerHTML=`<span class="plbl" style="color:${c.color}">Quick Fault</span>${p}`;
+    b.onmouseenter=()=>b.style.borderColor=c.color;
+    b.onmouseleave=()=>b.style.borderColor="#ebebeb";
     b.onclick=()=>send(p);
     grid.appendChild(b);
   });
@@ -374,36 +497,29 @@ function addMsg(role,text){
   const chat=document.getElementById("chat");
   const row=document.createElement("div");
   row.className="mrow "+role;
-  const av=document.createElement("div");
-  av.className="mav "+role;
+  const av=document.createElement("div");av.className="mav "+role;
   av.textContent=role==="user"?"👤":"⚙️";
-  const bub=document.createElement("div");
-  bub.className="mbub "+role;
+  const bub=document.createElement("div");bub.className="mbub "+role;
   if(role==="assistant")bub.innerHTML=fmt(text);
   else bub.textContent=text;
   row.appendChild(av);row.appendChild(bub);
-  chat.appendChild(row);
-  chat.scrollTop=chat.scrollHeight;
+  chat.appendChild(row);chat.scrollTop=chat.scrollHeight;
 }
 
 function showTyping(){
   const chat=document.getElementById("chat");
-  const row=document.createElement("div");
-  row.className="mrow";row.id="typing";
+  const row=document.createElement("div");row.className="mrow";row.id="typing";
   const av=document.createElement("div");av.className="mav ai";av.textContent="⚙️";
   const d=document.createElement("div");d.className="tdots";
   d.innerHTML='<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
-  row.appendChild(av);row.appendChild(d);
-  chat.appendChild(row);chat.scrollTop=chat.scrollHeight;
+  row.appendChild(av);row.appendChild(d);chat.appendChild(row);chat.scrollTop=chat.scrollHeight;
 }
-
 function hideTyping(){const e=document.getElementById("typing");if(e)e.remove();}
 
 function showChat(){
   document.getElementById("empty").style.display="none";
   const chat=document.getElementById("chat");
-  chat.style.display="flex";
-  chat.style.flexDirection="column";
+  chat.style.display="flex";chat.style.flexDirection="column";
   document.getElementById("newbtn").style.display="block";
 }
 
@@ -416,18 +532,18 @@ function newChat(){
 }
 
 async function send(txt){
-  token = localStorage.getItem("ff_tok");
+  token=localStorage.getItem("ff_tok");
   if(!token){goLogin();return;}
   const inp=document.getElementById("minput");
   const text=txt||inp.value.trim();
   if(!text)return;
-  showChat();
-  inp.value="";
+  const c=CATS[cat];
+  const context=`Current category: ${c.label}. `;
+  showChat();inp.value="";
   document.getElementById("sbtn").disabled=true;
-  msgs.push({role:"user",content:text});
+  msgs.push({role:"user",content:context+text});
   addMsg("user",text);
   showTyping();
-
   try{
     const r=await fetch("/api/chat",{
       method:"POST",
@@ -438,19 +554,24 @@ async function send(txt){
     if(r.status===403&&d.error==="upgrade_required"){hideTyping();msgs.pop();goPaywall();document.getElementById("sbtn").disabled=false;return;}
     if(r.status===401){hideTyping();localStorage.removeItem("ff_tok");goLogin();return;}
     const reply=d.content?.map(b=>b.text||"").join("")||(d.error?"Error: "+(d.error.message||JSON.stringify(d.error)):"No response.");
-    hideTyping();
-    msgs.push({role:"assistant",content:reply});
-    addMsg("assistant",reply);
+    hideTyping();msgs.push({role:"assistant",content:reply});addMsg("assistant",reply);
     if(user&&user.plan==="free"){
-      user.queriesUsed=(user.queriesUsed||0)+1;
-      updateUI();
+      user.queriesUsed=(user.queriesUsed||0)+1;updateUI();
+      if(Math.max(0,3-user.queriesUsed)===1){
+        const chat=document.getElementById("chat");
+        const n=document.createElement("div");
+        n.style.cssText="background:#fff8f5;border:1px solid #ffd5b8;border-radius:10px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;";
+        n.innerHTML='<div style="font-size:11px;color:#e65c00;font-weight:600">🔥 Last free query today — upgrade for unlimited</div><button onclick="goPaywall()" style="background:#e65c00;color:#fff;border:none;border-radius:7px;padding:5px 10px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit">Upgrade</button>';
+        chat.appendChild(n);chat.scrollTop=chat.scrollHeight;
+      }
     }
   }catch(e){hideTyping();addMsg("assistant","Error: "+e.message);}
   document.getElementById("sbtn").disabled=false;
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
-  buildCats();buildPrompts();checkSession();
+  buildPrompts();
+  checkSession();
   document.getElementById("minput").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}});
   document.getElementById("lpass").addEventListener("keydown",e=>{if(e.key==="Enter")doLogin();});
   document.getElementById("spass").addEventListener("keydown",e=>{if(e.key==="Enter")doSignup();});
