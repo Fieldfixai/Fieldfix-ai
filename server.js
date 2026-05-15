@@ -74,6 +74,8 @@ async function requireAuth(req, res, next) {
     if (!userResult.data || !userResult.data[0]) return res.status(401).json({ error: "User not found" });
     req.user = userResult.data[0];
     req.userId = session.user_id;
+    // Update last active timestamp
+    await supabase("PATCH", "sessions", { last_active: new Date().toISOString() }, `?token=eq.${token}`);
     next();
   } catch (e) {
     res.status(401).json({ error: "Auth error: " + e.message });
@@ -95,8 +97,9 @@ app.post("/api/signup", async (req, res) => {
     });
     if (!userResult.data || !userResult.data[0]) return res.status(500).json({ error: "Failed to create account: " + JSON.stringify(userResult.data) });
     const user = userResult.data[0];
+    await supabase("DELETE", "sessions", null, `?user_id=eq.${user.id}`);
     const token = generateToken();
-    await supabase("POST", "sessions", { user_id: user.id, token });
+    await supabase("POST", "sessions", { user_id: user.id, token, last_active: new Date().toISOString() });
     res.json({ token, email: user.email, plan: user.plan, queriesUsed: 0 });
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -117,8 +120,10 @@ app.post("/api/login", async (req, res) => {
       await supabase("PATCH", "users", { queries_used: 0, queries_reset_date: today }, `?id=eq.${user.id}`);
       queriesUsed = 0;
     }
+    // Delete ALL existing sessions for this user — prevents account sharing
+    await supabase("DELETE", "sessions", null, `?user_id=eq.${user.id}`);
     const token = generateToken();
-    await supabase("POST", "sessions", { user_id: user.id, token });
+    await supabase("POST", "sessions", { user_id: user.id, token, last_active: new Date().toISOString() });
     res.json({ token, email: user.email, plan: user.plan, queriesUsed });
   } catch (e) {
     res.status(500).json({ error: e.message });
