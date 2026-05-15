@@ -26,6 +26,22 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f5f6f7;color:#1a1a1
 .free-badge{background:#f5f5f5;border-radius:8px;padding:10px 14px;font-size:12px;color:#666;text-align:center;margin-bottom:16px;}
 .free-badge strong{color:#e65c00;}
 #screen-app{display:flex;flex-direction:column;height:100vh;}
+#app-body{display:flex;flex:1;overflow:hidden;}
+#history-sidebar{width:260px;background:#fff;border-right:1px solid #ebebeb;display:flex;flex-direction:column;flex-shrink:0;transition:all 0.3s;}
+#history-sidebar.collapsed{width:0;overflow:hidden;}
+#history-header{padding:12px 14px;border-bottom:1px solid #ebebeb;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+#history-title{font-size:12px;font-weight:700;color:#1a1a1a;}
+#history-clear{font-size:10px;color:#e65c00;cursor:pointer;background:none;border:none;font-family:inherit;}
+#history-list{flex:1;overflow-y:auto;padding:8px;}
+.history-item{padding:8px 10px;border-radius:8px;cursor:pointer;margin-bottom:4px;border:1px solid transparent;transition:all 0.15s;}
+.history-item:hover{background:#f8f8f8;border-color:#ebebeb;}
+.history-cat{font-size:9px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:#e65c00;margin-bottom:2px;}
+.history-q{font-size:11px;color:#333;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.history-time{font-size:9px;color:#bbb;margin-top:2px;}
+#history-pro-notice{padding:16px;text-align:center;}
+#history-pro-notice p{font-size:11px;color:#888;margin-bottom:10px;line-height:1.4;}
+#history-pro-btn{background:#e65c00;color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
+#app-main-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;}
 #hdr{background:#fff;border-bottom:3px solid #e65c00;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,0.07);}
 #hdr-left{display:flex;align-items:center;gap:10px;}
 #hdr-icon{width:34px;height:34px;background:#e65c00;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;transition:background 0.3s;}
@@ -147,14 +163,14 @@ strong{font-weight:700;}
 
 <div id="screen-paywall" class="hidden">
   <div id="pw-icon">⚙️</div>
-  <div id="pw-title">3 free queries used</div>
-  <div id="pw-sub">Upgrade to Pro for unlimited troubleshooting — less than the cost of one hour of downtime.</div>
-  <div id="plans">
+  <div id="pw-title">Upgrade FieldFix AI</div>
+  <div id="pw-sub">Choose the plan that fits your team. Less than one hour of downtime pays for a year.</div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;max-width:860px;width:100%;margin-bottom:16px;">
     <div class="pc">
       <div class="pname">Free</div><div class="pprice">$0</div>
       <div class="pdiv"></div>
       <div class="pf"><span class="pck">✓</span>3 queries/day</div>
-      <div class="pf"><span class="pck">✓</span>All equipment types</div>
+      <div class="pf"><span class="pck">✓</span>All 24 categories</div>
       <button class="pbtn" style="background:#333;color:#666;cursor:default">Current Plan</button>
     </div>
     <div class="pc hi">
@@ -162,10 +178,28 @@ strong{font-weight:700;}
       <div class="pname">Pro</div><div class="pprice">$9.99<span class="pper">/mo</span></div>
       <div class="pdiv"></div>
       <div class="pf"><span class="pck">✓</span>Unlimited queries</div>
-      <div class="pf"><span class="pck">✓</span>Save history</div>
-      <div class="pf"><span class="pck">✓</span>All equipment types</div>
+      <div class="pf"><span class="pck">✓</span>All 24 categories</div>
+      <div class="pf"><span class="pck">✓</span>1 user</div>
       <div class="pf"><span class="pck">✓</span>Cancel anytime</div>
-      <button class="pbtn" style="background:#fff;color:#e65c00;" onclick="alert('Email hello@fieldfix.io to upgrade!')">Go Pro →</button>
+      <button class="pbtn" style="background:#fff;color:#e65c00;" onclick="alert('Email hello@fieldfix.io to upgrade to Pro!')">Go Pro →</button>
+    </div>
+    <div class="pc" style="border-color:#0078d4;">
+      <div class="pname" style="color:#0078d4;">Small Team</div><div class="pprice">$39<span class="pper">/mo</span></div>
+      <div class="pdiv" style="background:#0078d420;"></div>
+      <div class="pf"><span class="pck" style="color:#0078d4;">✓</span>Unlimited queries</div>
+      <div class="pf"><span class="pck" style="color:#0078d4;">✓</span>Up to 5 techs</div>
+      <div class="pf"><span class="pck" style="color:#0078d4;">✓</span>Team admin dashboard</div>
+      <div class="pf"><span class="pck" style="color:#0078d4;">✓</span>Invite by email</div>
+      <button class="pbtn" style="background:#0078d4;color:#fff;" onclick="alert('Email hello@fieldfix.io to set up your team!')">Team →</button>
+    </div>
+    <div class="pc" style="border-color:#107c10;">
+      <div class="pname" style="color:#107c10;">Plant</div><div class="pprice">$149<span class="pper">/mo</span></div>
+      <div class="pdiv" style="background:#107c1020;"></div>
+      <div class="pf"><span class="pck" style="color:#107c10;">✓</span>Unlimited queries</div>
+      <div class="pf"><span class="pck" style="color:#107c10;">✓</span>Up to 50 techs</div>
+      <div class="pf"><span class="pck" style="color:#107c10;">✓</span>Team admin dashboard</div>
+      <div class="pf"><span class="pck" style="color:#107c10;">✓</span>Priority support</div>
+      <button class="pbtn" style="background:#107c10;color:#fff;" onclick="alert('Email hello@fieldfix.io for plant pricing!')">Plant →</button>
     </div>
   </div>
   <button id="pw-back" onclick="goApp()">← Back to app</button>
@@ -182,6 +216,8 @@ strong{font-weight:700;}
       <div id="qbadge">3 left</div>
       <button id="ubtn" onclick="goPaywall()">Upgrade</button>
       <button class="hbtn" id="newbtn" style="display:none" onclick="newChat()">New</button>
+      <button class="hbtn" id="historybtn" onclick="toggleHistory()" style="display:none">🕐 History</button>
+      <button class="hbtn" id="teambtn" onclick="goTeam()" style="display:none">👥 Team</button>
       <button class="hbtn" onclick="doLogout()">Sign Out</button>
     </div>
   </div>
@@ -261,6 +297,9 @@ strong{font-weight:700;}
       <button id="sbtn" onclick="send()">Send →</button>
     </div>
     <div id="ihint">Fanuc · Siemens · Allen-Bradley · Mitsubishi · Mazak · Haas · Okuma · Hydraulics · Pneumatics · Motors · Safety · Welding</div>
+  </div>
+  </div>
+  </div>
   </div>
 </div>
 
@@ -434,10 +473,14 @@ async function doLogout(){
 function updateUI(){
   if(!user)return;
   document.getElementById("uemail").textContent=user.email;
-  if(user.plan==="pro"){
-    document.getElementById("qbadge").textContent="⭐ Pro";
+  if(user.plan==="pro"||user.plan==="small_team"||user.plan==="team"||user.plan==="plant"){
+    document.getElementById("qbadge").textContent="⭐ "+user.plan.replace(/_/g," ");
     document.getElementById("ubtn").style.display="none";
     document.getElementById("fnotice").style.display="none";
+    document.getElementById("historybtn").style.display="block";
+    if(user.plan!=="pro"){
+      document.getElementById("teambtn").style.display="block";
+    }
   }else{
     const left=Math.max(0,3-(user.queriesUsed||0));
     document.getElementById("qbadge").textContent=left+" left";
@@ -555,6 +598,7 @@ async function send(txt){
     if(r.status===401){hideTyping();localStorage.removeItem("ff_tok");goLogin();return;}
     const reply=d.content?.map(b=>b.text||"").join("")||(d.error?"Error: "+(d.error.message||JSON.stringify(d.error)):"No response.");
     hideTyping();msgs.push({role:"assistant",content:reply});addMsg("assistant",reply);
+    saveToHistory(text, reply);
     if(user&&user.plan==="free"){
       user.queriesUsed=(user.queriesUsed||0)+1;updateUI();
       if(Math.max(0,3-user.queriesUsed)===1){
@@ -569,6 +613,84 @@ async function send(txt){
   document.getElementById("sbtn").disabled=false;
 }
 
+// History functions
+let historyOpen = false;
+
+function toggleHistory(){
+  historyOpen = !historyOpen;
+  const sidebar = document.getElementById('history-sidebar');
+  if(historyOpen){
+    sidebar.classList.remove('collapsed');
+    loadHistory();
+  } else {
+    sidebar.classList.add('collapsed');
+  }
+}
+
+async function loadHistory(){
+  const list = document.getElementById('history-list');
+  const proNotice = document.getElementById('history-pro-notice');
+  if(!user || user.plan === 'free'){
+    list.style.display = 'none';
+    proNotice.style.display = 'block';
+    return;
+  }
+  try{
+    const r = await fetch('/api/history', {headers:{'Authorization':'Bearer '+token}});
+    const d = await r.json();
+    list.innerHTML = '';
+    if(!d.history || d.history.length === 0){
+      list.innerHTML = '<div style="padding:16px;text-align:center;font-size:11px;color:#bbb;">No searches yet.<br/>Your troubleshooting history will appear here.</div>';
+      return;
+    }
+    d.history.forEach(h => {
+      const item = document.createElement('div');
+      item.className = 'history-item';
+      const time = new Date(h.created_at).toLocaleDateString('en-US', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'});
+      item.innerHTML = '<div class="history-cat">'+h.category.replace('-',' ')+'</div><div class="history-q">'+h.question.replace(/^Current category:.*?\./,'').trim()+'</div><div class="history-time">'+time+'</div>';
+      item.onclick = () => reloadHistory(h);
+      list.appendChild(item);
+    });
+  }catch(e){console.log(e);}
+}
+
+function reloadHistory(h){
+  // Load the past conversation
+  msgs = [
+    {role:'user', content: h.question},
+    {role:'assistant', content: h.answer}
+  ];
+  showChat();
+  document.getElementById('chat').innerHTML = '';
+  addMsg('user', h.question.replace(/^Current category:.*?\./,'').trim());
+  addMsg('assistant', h.answer);
+}
+
+async function saveToHistory(question, answer){
+  if(!user || user.plan === 'free') return;
+  try{
+    await fetch('/api/history/save', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body: JSON.stringify({question, answer, category: cat})
+    });
+    if(historyOpen) loadHistory();
+  }catch(e){}
+}
+
+async function clearHistory(){
+  if(!confirm('Clear all search history?')) return;
+  // Clear by loading all and deleting
+  try{
+    const r = await fetch('/api/history', {headers:{'Authorization':'Bearer '+token}});
+    const d = await r.json();
+    for(const h of d.history){
+      await fetch('/api/history/'+h.id, {method:'DELETE', headers:{'Authorization':'Bearer '+token}});
+    }
+    loadHistory();
+  }catch(e){}
+}
+
 document.addEventListener("DOMContentLoaded",()=>{
   buildPrompts();
   checkSession();
@@ -577,5 +699,141 @@ document.addEventListener("DOMContentLoaded",()=>{
   document.getElementById("spass").addEventListener("keydown",e=>{if(e.key==="Enter")doSignup();});
 });
 </script>
+
+<div id="screen-team" class="hidden">
+  <div style="min-height:100vh;background:#f5f6f7;display:flex;flex-direction:column;">
+    <div style="background:#fff;border-bottom:3px solid #0078d4;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.07);">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:34px;height:34px;background:#0078d4;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;">👥</div>
+        <div><div style="font-size:15px;font-weight:800;">Team Dashboard</div><div style="font-size:9px;color:#999;">Manage your team</div></div>
+      </div>
+      <button class="hbtn" onclick="goApp()">← Back to App</button>
+    </div>
+    <div style="padding:24px;max-width:700px;margin:0 auto;width:100%;">
+      <div id="team-content">
+        <div style="text-align:center;padding:40px;">
+          <div style="font-size:40px;margin-bottom:16px;">👥</div>
+          <div style="font-size:18px;font-weight:800;margin-bottom:8px;">No Team Yet</div>
+          <div style="font-size:13px;color:#888;margin-bottom:24px;">Create a team to invite your technicians</div>
+          <div style="background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:24px;margin-bottom:16px;">
+            <div style="font-size:13px;font-weight:700;margin-bottom:12px;">Create Your Team</div>
+            <input id="team-name" placeholder="Company or plant name" style="width:100%;padding:10px 12px;border:1.5px solid #e5e5e5;border-radius:8px;font-size:13px;font-family:inherit;outline:none;margin-bottom:12px;"/>
+            <select id="team-plan" style="width:100%;padding:10px 12px;border:1.5px solid #e5e5e5;border-radius:8px;font-size:13px;font-family:inherit;outline:none;margin-bottom:16px;">
+              <option value="small_team">Small Team — $39/mo — Up to 5 techs</option>
+              <option value="team">Team — $79/mo — Up to 15 techs</option>
+              <option value="plant">Plant — $149/mo — Up to 50 techs</option>
+            </select>
+            <button onclick="createTeam()" style="width:100%;padding:12px;background:#0078d4;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">Create Team →</button>
+          </div>
+        </div>
+      </div>
+      <div id="team-members-section" style="display:none;">
+        <div style="background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:20px;margin-bottom:16px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+            <div style="font-size:14px;font-weight:800;" id="team-name-display"></div>
+            <div style="font-size:11px;color:#888;" id="team-seats-display"></div>
+          </div>
+          <div id="members-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;"></div>
+          <div style="border-top:1px solid #f0f0f0;padding-top:16px;">
+            <div style="font-size:12px;font-weight:700;margin-bottom:8px;">Invite a Technician</div>
+            <div style="display:flex;gap:8px;">
+              <input id="invite-email" placeholder="tech@company.com" style="flex:1;padding:8px 12px;border:1.5px solid #e5e5e5;border-radius:8px;font-size:12px;font-family:inherit;outline:none;"/>
+              <button onclick="inviteMember()" style="padding:8px 16px;background:#0078d4;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">Invite</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Team functions
+async function goTeam(){
+  show("screen-team");
+  await loadTeam();
+}
+
+async function loadTeam(){
+  try{
+    const r = await fetch("/api/teams/mine", {headers:{"Authorization":"Bearer "+token}});
+    const d = await r.json();
+    if(d.team){
+      showTeamDashboard(d.team, d.members, d.myRole);
+    }
+  }catch(e){console.log(e);}
+}
+
+function showTeamDashboard(team, members, myRole){
+  document.getElementById("team-content").style.display = "none";
+  document.getElementById("team-members-section").style.display = "block";
+  document.getElementById("team-name-display").textContent = team.name;
+  document.getElementById("team-seats-display").textContent = members.length + " / " + team.seats + " seats used";
+  const list = document.getElementById("members-list");
+  list.innerHTML = "";
+  members.forEach(m => {
+    const row = document.createElement("div");
+    row.style.cssText = "display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#f8f8f8;border-radius:8px;";
+    const email = m.invited_email || "Unknown";
+    const badge = m.role === "admin" ? "<span style='background:#e65c00;color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;'>ADMIN</span>" : m.status === "pending" ? "<span style='background:#f0f0f0;color:#888;font-size:9px;padding:2px 7px;border-radius:10px;'>PENDING</span>" : "<span style='background:#e8f5e9;color:#107c10;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;'>ACTIVE</span>";
+    const removeBtn = myRole === "admin" && m.role !== "admin" ? "<button onclick='removeMember(""+ m.user_id +"")' style='background:none;border:none;color:#cc0000;font-size:11px;cursor:pointer;'>Remove</button>" : "";
+    row.innerHTML = "<div style='font-size:12px;'>" + email + " " + badge + "</div>" + removeBtn;
+    list.appendChild(row);
+  });
+}
+
+async function createTeam(){
+  const name = document.getElementById("team-name").value.trim();
+  const plan = document.getElementById("team-plan").value;
+  if(!name){alert("Enter your company name");return;}
+  try{
+    const r = await fetch("/api/teams/create", {
+      method:"POST",
+      headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
+      body:JSON.stringify({name, plan})
+    });
+    const d = await r.json();
+    if(d.error){alert(d.error);}
+    else{
+      alert("Team created! Now invite your technicians.");
+      await loadTeam();
+    }
+  }catch(e){alert("Error: "+e.message);}
+}
+
+async function inviteMember(){
+  const email = document.getElementById("invite-email").value.trim();
+  if(!email){alert("Enter an email address");return;}
+  try{
+    const r = await fetch("/api/teams/invite", {
+      method:"POST",
+      headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
+      body:JSON.stringify({email})
+    });
+    const d = await r.json();
+    if(d.error){alert(d.error);}
+    else{
+      alert("Invite sent to "+email);
+      document.getElementById("invite-email").value = "";
+      await loadTeam();
+    }
+  }catch(e){alert("Error: "+e.message);}
+}
+
+async function removeMember(userId){
+  if(!confirm("Remove this tech from the team?"))return;
+  try{
+    const r = await fetch("/api/teams/remove", {
+      method:"POST",
+      headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
+      body:JSON.stringify({userId})
+    });
+    const d = await r.json();
+    if(d.error){alert(d.error);}
+    else{await loadTeam();}
+  }catch(e){alert("Error: "+e.message);}
+}
+</script>
+
 </body>
 </html>
