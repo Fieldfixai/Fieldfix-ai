@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Team Dashboard — FieldFix AI</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#f5f6f7;color:#1a1a1a;}
+.header{background:#fff;border-bottom:3px solid #0078d4;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.07);}
+.header-left{display:flex;align-items:center;gap:10px;}
+.header-icon{width:34px;height:34px;background:#0078d4;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;}
+.header-title{font-size:15px;font-weight:800;}
+.header-sub{font-size:9px;color:#999;}
+.back-btn{background:#f0f0f0;border:1px solid #ddd;color:#666;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;text-decoration:none;}
+.content{max-width:800px;margin:0 auto;padding:24px 16px;}
+.card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:20px;margin-bottom:16px;}
+.card-title{font-size:14px;font-weight:800;margin-bottom:4px;}
+.card-sub{font-size:12px;color:#888;margin-bottom:16px;}
+.plan-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:12px;}
+.stat-row{display:flex;gap:16px;margin-bottom:16px;flex-wrap:wrap;}
+.stat{background:#f8f8f8;border-radius:10px;padding:12px 16px;flex:1;min-width:120px;}
+.stat-num{font-size:24px;font-weight:800;color:#0078d4;}
+.stat-label{font-size:11px;color:#888;margin-top:2px;}
+.member-row{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:8px;margin-bottom:6px;background:#f8f8f8;}
+.member-email{font-size:13px;font-weight:500;}
+.member-role{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;}
+.role-admin{background:#fff8f5;color:#e65c00;}
+.role-member{background:#e8f5e9;color:#107c10;}
+.role-pending{background:#f5f5f5;color:#888;}
+.remove-btn{background:none;border:none;color:#cc0000;font-size:11px;cursor:pointer;font-family:inherit;}
+.invite-wrap{display:flex;gap:8px;margin-top:12px;}
+.invite-input{flex:1;padding:9px 12px;border:1.5px solid #e5e5e5;border-radius:8px;font-size:13px;font-family:inherit;outline:none;}
+.invite-input:focus{border-color:#0078d4;}
+.invite-btn{background:#0078d4;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+.no-team{text-align:center;padding:48px 20px;}
+.no-team-icon{font-size:48px;margin-bottom:16px;opacity:0.3;}
+.no-team-title{font-size:18px;font-weight:700;margin-bottom:8px;}
+.no-team-sub{font-size:13px;color:#888;margin-bottom:24px;}
+.create-form input, .create-form select{width:100%;padding:10px 12px;border:1.5px solid #e5e5e5;border-radius:8px;font-size:13px;font-family:inherit;outline:none;margin-bottom:12px;display:block;}
+.create-form input:focus, .create-form select:focus{border-color:#0078d4;}
+.create-btn{width:100%;padding:12px;background:#0078d4;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+.msg{padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:12px;display:none;}
+.msg.success{background:#e8f5e9;border:1px solid #a5d6a7;color:#107c10;}
+.msg.error{background:#fff0eb;border:1px solid #ffb899;color:#cc3300;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="header-icon">👥</div>
+    <div>
+      <div class="header-title">Team Dashboard</div>
+      <div class="header-sub">Manage your FieldFix AI team</div>
+    </div>
+  </div>
+  <a href="/app" class="back-btn">← Back to App</a>
+</div>
+
+<div class="content">
+  <div id="msg" class="msg"></div>
+  <div id="loading" style="text-align:center;padding:40px;font-size:13px;color:#888;">Loading team info...</div>
+  <div id="team-view" style="display:none;"></div>
+  <div id="no-team-view" style="display:none;">
+    <div class="no-team">
+      <div class="no-team-icon">👥</div>
+      <div class="no-team-title">No Team Yet</div>
+      <div class="no-team-sub">Create a team to invite your technicians and manage access from one place.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Create Your Team</div>
+      <div class="card-sub">Choose a plan and enter your company name to get started.</div>
+      <div class="create-form">
+        <input type="text" id="team-name" placeholder="Company or plant name (e.g. Acme Manufacturing)"/>
+        <select id="team-plan">
+          <option value="small_team">Small Team — $39/mo — Up to 5 techs</option>
+          <option value="team">Team — $79/mo — Up to 15 techs</option>
+          <option value="plant">Plant — $149/mo — Up to 50 techs</option>
+        </select>
+        <button class="create-btn" onclick="createTeam()">Create Team →</button>
+      </div>
+      <div style="margin-top:12px;font-size:11px;color:#aaa;text-align:center;">After creating your team email hello@fieldfix.io to complete billing setup.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const token = localStorage.getItem("ff_tok");
+
+function showMsg(text, type) {
+  const el = document.getElementById("msg");
+  el.textContent = text;
+  el.className = "msg " + type;
+  el.style.display = "block";
+  setTimeout(() => el.style.display = "none", 4000);
+}
+
+async function loadTeam() {
+  if (!token) { window.location.href = "/app"; return; }
+  try {
+    const r = await fetch("/api/teams/mine", {headers:{"Authorization":"Bearer "+token}});
+    if (r.status === 401) { window.location.href = "/app"; return; }
+    const d = await r.json();
+    document.getElementById("loading").style.display = "none";
+    if (d.team) {
+      renderTeam(d.team, d.members, d.myRole);
+    } else {
+      document.getElementById("no-team-view").style.display = "block";
+    }
+  } catch(e) {
+    document.getElementById("loading").textContent = "Error loading team. Please try again.";
+  }
+}
+
+function renderTeam(team, members, myRole) {
+  const view = document.getElementById("team-view");
+  view.style.display = "block";
+
+  const planColors = {small_team:"#0078d4", team:"#6b3fa0", plant:"#107c10"};
+  const planColor = planColors[team.plan] || "#0078d4";
+  const planNames = {small_team:"Small Team", team:"Team", plant:"Plant"};
+  const planPrices = {small_team:"$39/mo", team:"$79/mo", plant:"$149/mo"};
+
+  const activeMembers = members.filter(m => m.status === "active").length;
+  const pendingMembers = members.filter(m => m.status === "pending").length;
+
+  view.innerHTML = `
+    <div class="card">
+      <div class="card-title">${team.name}</div>
+      <span class="plan-badge" style="background:${planColor}18;color:${planColor};">${planNames[team.plan] || team.plan} — ${planPrices[team.plan] || ""}</span>
+      <div class="stat-row">
+        <div class="stat"><div class="stat-num">${activeMembers}</div><div class="stat-label">Active Techs</div></div>
+        <div class="stat"><div class="stat-num">${team.seats}</div><div class="stat-label">Total Seats</div></div>
+        <div class="stat"><div class="stat-num">${team.seats - activeMembers}</div><div class="stat-label">Seats Available</div></div>
+        ${pendingMembers > 0 ? '<div class="stat"><div class="stat-num" style="color:#e65c00;">'+pendingMembers+'</div><div class="stat-label">Pending Invites</div></div>' : ""}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Team Members</div>
+      <div class="card-sub">Manage who has access to FieldFix AI on your team.</div>
+      <div id="members-list">
+        ${members.map(m => `
+          <div class="member-row">
+            <div>
+              <div class="member-email">${m.invited_email || "Unknown"}</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="member-role ${m.role === 'admin' ? 'role-admin' : m.status === 'pending' ? 'role-pending' : 'role-member'}">
+                ${m.role === 'admin' ? 'ADMIN' : m.status === 'pending' ? 'PENDING' : 'ACTIVE'}
+              </span>
+              ${myRole === 'admin' && m.role !== 'admin' ? '<button class="remove-btn" onclick="removeMember(\''+m.user_id+'\', \''+m.id+'\')">Remove</button>' : ""}
+            </div>
+          </div>
+        `).join("")}
+      </div>
+      ${myRole === 'admin' ? `
+        <div style="border-top:1px solid #f0f0f0;padding-top:14px;margin-top:8px;">
+          <div style="font-size:12px;font-weight:700;margin-bottom:8px;">Invite a Technician</div>
+          <div class="invite-wrap">
+            <input type="email" id="invite-email" class="invite-input" placeholder="tech@company.com"/>
+            <button class="invite-btn" onclick="inviteMember()">Send Invite</button>
+          </div>
+        </div>
+      ` : ""}
+    </div>
+
+    <div class="card">
+      <div class="card-title">Need more seats?</div>
+      <div class="card-sub">Email us to upgrade your plan or add more techs.</div>
+      <a href="mailto:hello@fieldfix.io?subject=Upgrade Team Plan&body=Hi, I would like to upgrade my team plan. Team name: ${team.name}" style="display:inline-block;background:#e65c00;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;">Contact Us to Upgrade →</a>
+    </div>
+  `;
+}
+
+async function inviteMember() {
+  const email = document.getElementById("invite-email").value.trim();
+  if (!email) { showMsg("Enter an email address", "error"); return; }
+  try {
+    const r = await fetch("/api/teams/invite", {
+      method:"POST",
+      headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
+      body:JSON.stringify({email})
+    });
+    const d = await r.json();
+    if (d.error) { showMsg(d.error, "error"); }
+    else { showMsg("Invite sent to " + email, "success"); document.getElementById("invite-email").value = ""; loadTeam(); }
+  } catch(e) { showMsg("Error: " + e.message, "error"); }
+}
+
+async function removeMember(userId, memberId) {
+  if (!confirm("Remove this tech from the team?")) return;
+  try {
+    const r = await fetch("/api/teams/remove", {
+      method:"POST",
+      headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
+      body:JSON.stringify({userId})
+    });
+    const d = await r.json();
+    if (d.error) { showMsg(d.error, "error"); }
+    else { showMsg("Member removed", "success"); loadTeam(); }
+  } catch(e) { showMsg("Error: " + e.message, "error"); }
+}
+
+async function createTeam() {
+  const name = document.getElementById("team-name").value.trim();
+  const plan = document.getElementById("team-plan").value;
+  if (!name) { showMsg("Enter your company name", "error"); return; }
+  try {
+    const r = await fetch("/api/teams/create", {
+      method:"POST",
+      headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
+      body:JSON.stringify({name, plan})
+    });
+    const d = await r.json();
+    if (d.error) { showMsg(d.error, "error"); }
+    else {
+      showMsg("Team created! Email hello@fieldfix.io to complete billing.", "success");
+      document.getElementById("no-team-view").style.display = "none";
+      loadTeam();
+    }
+  } catch(e) { showMsg("Error: " + e.message, "error"); }
+}
+
+loadTeam();
+</script>
+</body>
+</html>
