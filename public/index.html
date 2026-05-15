@@ -618,7 +618,7 @@ async function send(txt){
         const chat=document.getElementById("chat");
         const n=document.createElement("div");
         n.style.cssText="background:#fff8f5;border:1px solid #ffd5b8;border-radius:10px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;";
-        n.innerHTML='<div style="font-size:11px;color:#e65c00;font-weight:600">🔥 Last free query today — upgrade for unlimited</div><button onclick="window.open('/pricing','_blank')" style="background:#e65c00;color:#fff;border:none;border-radius:7px;padding:5px 10px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit">Upgrade</button>';
+        n.innerHTML='<div style="font-size:11px;color:#e65c00;font-weight:600">🔥 Last free query today — upgrade for unlimited</div><button onclick="window.open(\'/pricing\',\'_blank\')" style="background:#e65c00;color:#fff;border:none;border-radius:7px;padding:5px 10px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit">Upgrade</button>';
         chat.appendChild(n);chat.scrollTop=chat.scrollHeight;
       }
     }
@@ -791,7 +791,7 @@ function showTeamDashboard(team, members, myRole){
     row.style.cssText = "display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#f8f8f8;border-radius:8px;";
     const email = m.invited_email || "Unknown";
     const badge = m.role === "admin" ? "<span style='background:#e65c00;color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;'>ADMIN</span>" : m.status === "pending" ? "<span style='background:#f0f0f0;color:#888;font-size:9px;padding:2px 7px;border-radius:10px;'>PENDING</span>" : "<span style='background:#e8f5e9;color:#107c10;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;'>ACTIVE</span>";
-    const removeBtn = myRole === "admin" && m.role !== "admin" ? "<button onclick='removeMember(""+ m.user_id +"")' style='background:none;border:none;color:#cc0000;font-size:11px;cursor:pointer;'>Remove</button>" : "";
+    const removeBtn = myRole === "admin" && m.role !== "admin" ? '<button onclick="removeMember(\"'+m.user_id+'\");" style="background:none;border:none;color:#cc0000;font-size:11px;cursor:pointer;">Remove</button>' : "";
     row.innerHTML = "<div style='font-size:12px;'>" + email + " " + badge + "</div>" + removeBtn;
     list.appendChild(row);
   });
