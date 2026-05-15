@@ -334,26 +334,46 @@ footer{padding:36px 40px;border-top:1px solid rgba(255,255,255,0.06);display:fle
   <div class="section-label">Pricing</div>
   <div class="section-title">Less than one hour of downtime.</div>
   <p class="section-sub" style="margin:0 auto 0">Start free. Upgrade when ready. Cancel anytime.</p>
-  <div class="pricing-grid">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:48px;max-width:900px;margin-left:auto;margin-right:auto;">
     <div class="price-card">
       <div class="price-name">Free</div>
-      <div class="price-amount">$0</div>
+      <div class="price-amount">/bin/sh</div>
       <div class="price-divider"></div>
       <div class="price-feature"><span class="price-check">✓</span>3 queries per day</div>
-      <div class="price-feature"><span class="price-check">✓</span>All 24 equipment categories</div>
+      <div class="price-feature"><span class="price-check">✓</span>All 24 categories</div>
       <div class="price-feature"><span class="price-check">✓</span>No credit card needed</div>
       <button class="price-btn price-btn-free" onclick="window.location.href='/app'">Get Started Free</button>
     </div>
     <div class="price-card featured">
       <div class="price-popular">MOST POPULAR</div>
       <div class="price-name">Pro</div>
-      <div class="price-amount">$9.99<span class="price-period">/mo</span></div>
+      <div class="price-amount">.99<span class="price-period">/mo</span></div>
       <div class="price-divider"></div>
       <div class="price-feature"><span class="price-check">✓</span>Unlimited queries</div>
-      <div class="price-feature"><span class="price-check">✓</span>Save session history</div>
-      <div class="price-feature"><span class="price-check">✓</span>All 24 equipment categories</div>
-      <div class="price-feature"><span class="price-check">✓</span>Cancel anytime</div>
+      <div class="price-feature"><span class="price-check">✓</span>Search history</div>
+      <div class="price-feature"><span class="price-check">✓</span>All 24 categories</div>
+      <div class="price-feature"><span class="price-check">✓</span>1 user · Cancel anytime</div>
       <button class="price-btn price-btn-pro" onclick="window.location.href='/app'">Start Pro →</button>
+    </div>
+    <div class="price-card" style="border-color:#0078d4;">
+      <div class="price-name" style="color:#0078d4;">Small Team</div>
+      <div class="price-amount">9<span class="price-period">/mo</span></div>
+      <div class="price-divider" style="background:rgba(0,120,212,0.15);"></div>
+      <div class="price-feature"><span class="price-check" style="color:#0078d4;">✓</span>Unlimited queries</div>
+      <div class="price-feature"><span class="price-check" style="color:#0078d4;">✓</span>Up to 5 techs</div>
+      <div class="price-feature"><span class="price-check" style="color:#0078d4;">✓</span>Team dashboard</div>
+      <div class="price-feature"><span class="price-check" style="color:#0078d4;">✓</span>Invite by email</div>
+      <button class="price-btn" style="background:#0078d4;color:#fff;margin-top:24px;" onclick="window.location.href='/app'">Start Team →</button>
+    </div>
+    <div class="price-card" style="border-color:#107c10;">
+      <div class="price-name" style="color:#107c10;">Plant</div>
+      <div class="price-amount">49<span class="price-period">/mo</span></div>
+      <div class="price-divider" style="background:rgba(16,124,16,0.15);"></div>
+      <div class="price-feature"><span class="price-check" style="color:#107c10;">✓</span>Unlimited queries</div>
+      <div class="price-feature"><span class="price-check" style="color:#107c10;">✓</span>Up to 50 techs</div>
+      <div class="price-feature"><span class="price-check" style="color:#107c10;">✓</span>Team dashboard</div>
+      <div class="price-feature"><span class="price-check" style="color:#107c10;">✓</span>Priority support</div>
+      <button class="price-btn" style="background:#107c10;color:#fff;margin-top:24px;" onclick="window.location.href='/app'">Contact Us →</button>
     </div>
   </div>
 </section>
