@@ -223,9 +223,9 @@ strong{font-weight:700;}
     <div id="hdr-right">
       <div id="uemail"></div>
       <div id="qbadge">3 left</div>
-      <button id="ubtn" onclick="goPaywall()">Upgrade</button>
+      <button id="ubtn" onclick="window.open('/pricing','_blank')">Upgrade</button>
       <button class="hbtn" id="newbtn" style="display:none" onclick="newChat()">New</button>
-      <button class="hbtn" id="historybtn" onclick="toggleHistory()" style="display:none">🕐 History</button>
+      <button class="hbtn" id="historybtn" onclick="window.open('/history','_blank')" style="display:none">🕐 History</button>
       <button class="hbtn" id="teambtn" onclick="goTeam()" style="display:none">👥 Team</button>
       <button class="hbtn" onclick="doLogout()">Sign Out</button>
     </div>
@@ -294,7 +294,7 @@ strong{font-weight:700;}
       <div id="pgrid"></div>
       <div id="fnotice">
         <div><div id="fntxt">Free — 3 queries/day</div><div id="fnsub">Go Pro for unlimited — $9.99/mo</div></div>
-        <button class="fnbtn" onclick="goPaywall()">Upgrade →</button>
+        <button class="fnbtn" onclick="window.open('/pricing','_blank')">Upgrade →</button>
       </div>
     </div>
     <div id="chat" style="display:none;flex-direction:column;"></div>
@@ -621,7 +621,7 @@ async function send(txt){
         const chat=document.getElementById("chat");
         const n=document.createElement("div");
         n.style.cssText="background:#fff8f5;border:1px solid #ffd5b8;border-radius:10px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;";
-        n.innerHTML='<div style="font-size:11px;color:#e65c00;font-weight:600">🔥 Last free query today — upgrade for unlimited</div><button onclick="goPaywall()" style="background:#e65c00;color:#fff;border:none;border-radius:7px;padding:5px 10px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit">Upgrade</button>';
+        n.innerHTML='<div style="font-size:11px;color:#e65c00;font-weight:600">🔥 Last free query today — upgrade for unlimited</div><button onclick="window.open('/pricing','_blank')" style="background:#e65c00;color:#fff;border:none;border-radius:7px;padding:5px 10px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit">Upgrade</button>';
         chat.appendChild(n);chat.scrollTop=chat.scrollHeight;
       }
     }
