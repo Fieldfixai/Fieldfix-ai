@@ -147,6 +147,7 @@ strong{font-weight:700;}
       <div class="app-header-right">
         <span id="user-badge" class="badge">3 left</span>
         <a id="upgrade-btn" href="/pricing" target="_blank" class="upgrade-btn" style="display:none;">Upgrade</a>
+        <a id="manage-btn" href="/team" target="_blank" class="upgrade-btn" style="display:none;background:#0078d4;">Manage Team</a>
         <a id="history-btn" href="/history" target="_blank" class="hbtn" style="display:none;">🕐 History</a>
         <a id="team-btn" href="/team" target="_blank" class="hbtn" style="display:none;">👥 Team</a>
         <button class="hbtn" id="new-btn" onclick="newChat()" style="display:none;">New</button>
@@ -318,12 +319,16 @@ async function doLogout() {
 function updateUI() {
   if (!curUser) return;
   const isPro = ["pro","small_team","team","plant"].includes(curUser.plan);
+  const isTeam = ["small_team","team","plant"].includes(curUser.plan);
   if (isPro) {
     document.getElementById("user-badge").textContent = "⭐ " + curUser.plan.replace(/_/g," ");
     document.getElementById("upgrade-btn").style.display = "none";
     document.getElementById("free-notice").style.display = "none";
     document.getElementById("history-btn").style.display = "inline-block";
-    if (curUser.plan !== "pro") document.getElementById("team-btn").style.display = "inline-block";
+    if (isTeam) {
+      document.getElementById("team-btn").style.display = "inline-block";
+      document.getElementById("manage-btn").style.display = "inline-block";
+    }
   } else {
     const left = Math.max(0, 3 - (curUser.queriesUsed || 0));
     document.getElementById("user-badge").textContent = left + " left";
