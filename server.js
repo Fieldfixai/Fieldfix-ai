@@ -186,6 +186,16 @@ app.get("/app", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
+// History page
+app.get("/history", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "history.html"));
+});
+
+// Pricing page
+app.get("/pricing", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "pricing.html"));
+});
+
 app.get("/app/*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
