@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pricing — FieldFix AI</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135deg,#0a0a0a,#1a1a2e);min-height:100vh;color:#fff;display:flex;flex-direction:column;align-items:center;padding:40px 20px;}
+#logo{display:flex;align-items:center;gap:10px;margin-bottom:32px;}
+#logo-icon{width:40px;height:40px;background:#e65c00;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+#logo-text{font-size:18px;font-weight:800;}
+#title{font-size:28px;font-weight:900;letter-spacing:-1px;margin-bottom:8px;text-align:center;}
+#sub{font-size:14px;color:#aaa;margin-bottom:36px;text-align:center;max-width:400px;}
+#plans{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;max-width:1000px;width:100%;margin-bottom:28px;}
+.pc{background:#1a1a1a;border:2px solid #333;border-radius:14px;padding:24px 20px;flex:1;min-width:160px;max-width:190px;position:relative;}
+.pc.hi{background:#e65c00;border-color:#e65c00;box-shadow:0 8px 28px rgba(230,92,0,.4);}
+.pbadge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#fff;color:#e65c00;font-size:9px;font-weight:800;padding:3px 10px;border-radius:20px;white-space:nowrap;}
+.pname{font-size:13px;font-weight:700;color:#aaa;margin-bottom:4px;}
+.pc.hi .pname{color:#fff;}
+.pprice{font-size:26px;font-weight:900;color:#fff;margin-bottom:2px;}
+.pper{font-size:12px;font-weight:400;color:#666;}
+.pc.hi .pper{color:rgba(255,255,255,.7);}
+.pdiv{height:1px;background:#2a2a2a;margin:12px 0;}
+.pc.hi .pdiv{background:rgba(255,255,255,.25);}
+.pf{display:flex;gap:6px;margin-bottom:6px;font-size:11px;color:#888;}
+.pc.hi .pf{color:#fff;}
+.pck{color:#e65c00;}
+.pc.hi .pck{color:#fff;}
+.pbtn{margin-top:16px;width:100%;padding:10px;border-radius:9px;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+.back-link{color:#555;font-size:13px;text-decoration:none;margin-top:8px;}
+.back-link:hover{color:#fff;}
+</style>
+</head>
+<body>
+
+<div id="logo">
+  <div id="logo-icon">⚙️</div>
+  <div id="logo-text">FieldFix AI</div>
+</div>
+
+<div id="title">Choose your plan</div>
+<div id="sub">Less than one hour of downtime pays for a full year. Start free — no credit card needed.</div>
+
+<div id="plans">
+
+  <div class="pc">
+    <div class="pname">Free</div>
+    <div class="pprice">$0</div>
+    <div class="pdiv"></div>
+    <div class="pf"><span class="pck">✓</span>3 queries/day</div>
+    <div class="pf"><span class="pck">✓</span>All 24 categories</div>
+    <div class="pf"><span class="pck">✓</span>No credit card</div>
+    <div class="pf"><span class="pck">✓</span>1 user</div>
+    <button class="pbtn" style="background:#333;color:#666;cursor:default;">Current Plan</button>
+  </div>
+
+  <div class="pc hi">
+    <div class="pbadge">MOST POPULAR</div>
+    <div class="pname">Pro</div>
+    <div class="pprice">$9.99<span class="pper">/mo</span></div>
+    <div class="pdiv"></div>
+    <div class="pf"><span class="pck">✓</span>Unlimited queries</div>
+    <div class="pf"><span class="pck">✓</span>Search history</div>
+    <div class="pf"><span class="pck">✓</span>All 24 categories</div>
+    <div class="pf"><span class="pck">✓</span>Cancel anytime</div>
+    <button class="pbtn" style="background:#fff;color:#e65c00;" onclick="contact('Pro - $9.99/mo')">Go Pro →</button>
+  </div>
+
+  <div class="pc" style="border-color:#0078d4;">
+    <div class="pname" style="color:#0078d4;">Small Team</div>
+    <div class="pprice">$39<span class="pper">/mo</span></div>
+    <div class="pdiv" style="background:rgba(0,120,212,0.2);"></div>
+    <div class="pf"><span class="pck" style="color:#0078d4;">✓</span>Unlimited queries</div>
+    <div class="pf"><span class="pck" style="color:#0078d4;">✓</span>Up to 5 techs</div>
+    <div class="pf"><span class="pck" style="color:#0078d4;">✓</span>Team dashboard</div>
+    <div class="pf"><span class="pck" style="color:#0078d4;">✓</span>Invite by email</div>
+    <button class="pbtn" style="background:#0078d4;color:#fff;" onclick="contact('Small Team - $39/mo')">Get Started →</button>
+  </div>
+
+  <div class="pc" style="border-color:#6b3fa0;">
+    <div class="pname" style="color:#6b3fa0;">Team</div>
+    <div class="pprice">$79<span class="pper">/mo</span></div>
+    <div class="pdiv" style="background:rgba(107,63,160,0.2);"></div>
+    <div class="pf"><span class="pck" style="color:#6b3fa0;">✓</span>Unlimited queries</div>
+    <div class="pf"><span class="pck" style="color:#6b3fa0;">✓</span>Up to 15 techs</div>
+    <div class="pf"><span class="pck" style="color:#6b3fa0;">✓</span>Team dashboard</div>
+    <div class="pf"><span class="pck" style="color:#6b3fa0;">✓</span>Invite by email</div>
+    <button class="pbtn" style="background:#6b3fa0;color:#fff;" onclick="contact('Team - $79/mo')">Get Started →</button>
+  </div>
+
+  <div class="pc" style="border-color:#107c10;">
+    <div class="pname" style="color:#107c10;">Plant</div>
+    <div class="pprice">$149<span class="pper">/mo</span></div>
+    <div class="pdiv" style="background:rgba(16,124,16,0.2);"></div>
+    <div class="pf"><span class="pck" style="color:#107c10;">✓</span>Unlimited queries</div>
+    <div class="pf"><span class="pck" style="color:#107c10;">✓</span>Up to 50 techs</div>
+    <div class="pf"><span class="pck" style="color:#107c10;">✓</span>Team dashboard</div>
+    <div class="pf"><span class="pck" style="color:#107c10;">✓</span>Priority support</div>
+    <button class="pbtn" style="background:#107c10;color:#fff;" onclick="contact('Plant - $149/mo')">Get Started →</button>
+  </div>
+
+  <div class="pc" style="border-color:#e65c00;">
+    <div class="pname" style="color:#e65c00;">Enterprise</div>
+    <div class="pprice" style="font-size:20px;padding-top:4px;">Custom</div>
+    <div class="pdiv" style="background:rgba(230,92,0,0.2);"></div>
+    <div class="pf"><span class="pck" style="color:#e65c00;">✓</span>Unlimited queries</div>
+    <div class="pf"><span class="pck" style="color:#e65c00;">✓</span>50+ techs</div>
+    <div class="pf"><span class="pck" style="color:#e65c00;">✓</span>Multi-plant</div>
+    <div class="pf"><span class="pck" style="color:#e65c00;">✓</span>Dedicated support</div>
+    <button class="pbtn" style="background:#e65c00;color:#fff;" onclick="contact('Enterprise')">Contact Us →</button>
+  </div>
+
+</div>
+
+<a href="/app" class="back-link">← Back to app</a>
+
+<script>
+function contact(plan){
+  window.location.href = 'mailto:hello@fieldfix.io?subject=Upgrade to ' + encodeURIComponent(plan) + '&body=Hi, I would like to upgrade to the ' + encodeURIComponent(plan) + ' plan. My account email is: ';
+}
+</script>
+</body>
+</html>
