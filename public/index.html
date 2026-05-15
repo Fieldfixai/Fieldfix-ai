@@ -148,7 +148,7 @@ strong{font-weight:700;}
         <span id="user-badge" class="badge">3 left</span>
         <a id="upgrade-btn" href="/pricing" target="_blank" class="upgrade-btn" style="display:none;">Upgrade</a>
         <a id="history-btn" href="/history" target="_blank" class="hbtn" style="display:none;">🕐 History</a>
-        <a id="team-btn" href="#" class="hbtn" style="display:none;" onclick="showTeam()">👥 Team</a>
+        <a id="team-btn" href="/team" target="_blank" class="hbtn" style="display:none;">👥 Team</a>
         <button class="hbtn" id="new-btn" onclick="newChat()" style="display:none;">New</button>
         <button class="hbtn" onclick="doLogout()">Sign Out</button>
       </div>
@@ -480,9 +480,7 @@ async function saveHistory(question, answer) {
   } catch(e) {}
 }
 
-function showTeam() {
-  alert("Team dashboard coming soon! Email hello@fieldfix.io to set up your team account.");
-}
+// Team page at /team
 
 document.addEventListener("DOMContentLoaded", () => {
   buildPrompts();
