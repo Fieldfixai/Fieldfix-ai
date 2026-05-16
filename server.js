@@ -300,6 +300,19 @@ app.post("/api/teams/toggle-admin", requireAuth, async (req, res) => {
   }
 });
 
+// Remove pending invite
+app.post("/api/teams/remove-pending", requireAuth, async (req, res) => {
+  const { memberId } = req.body;
+  try {
+    const adminCheck = await supabase("GET", "team_members", null, `?user_id=eq.${req.userId}&role=eq.admin`);
+    if (!adminCheck.data || !adminCheck.data[0]) return res.status(403).json({ error: "Not authorized" });
+    await supabase("DELETE", "team_members", null, `?id=eq.${memberId}`);
+    res.json({ success: true });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // Remove a team member
 app.post("/api/teams/remove", requireAuth, async (req, res) => {
   const { userId } = req.body;
