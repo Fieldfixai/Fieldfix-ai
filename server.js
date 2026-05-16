@@ -197,6 +197,11 @@ app.get("/pricing", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "pricing.html"));
 });
 
+// Team page
+app.get("/team", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "team.html"));
+});
+
 app.get("/app/*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
