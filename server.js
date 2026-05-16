@@ -285,6 +285,21 @@ app.post("/api/teams/invite", requireAuth, async (req, res) => {
   }
 });
 
+// Toggle member admin role
+app.post("/api/teams/toggle-admin", requireAuth, async (req, res) => {
+  const { memberId, newRole } = req.body;
+  try {
+    // Verify requester is admin
+    const adminCheck = await supabase("GET", "team_members", null, `?user_id=eq.${req.userId}&role=eq.admin`);
+    if (!adminCheck.data || !adminCheck.data[0]) return res.status(403).json({ error: "Not authorized" });
+    // Update role
+    await supabase("PATCH", "team_members", { role: newRole }, `?id=eq.${memberId}`);
+    res.json({ success: true });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // Remove a team member
 app.post("/api/teams/remove", requireAuth, async (req, res) => {
   const { userId } = req.body;
