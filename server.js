@@ -227,11 +227,12 @@ app.post("/api/teams/create", requireAuth, async (req, res) => {
     });
     if (!teamResult.data || !teamResult.data[0]) return res.status(500).json({ error: "Failed to create team" });
     const team = teamResult.data[0];
-    // Add admin as first member
+    // Add creator as admin - always
     await supabase("POST", "team_members", {
       team_id: team.id,
       user_id: req.userId,
       role: "admin",
+      invited_email: req.user.email,
       status: "active"
     });
     res.json({ team });
@@ -270,12 +271,12 @@ app.post("/api/teams/invite", requireAuth, async (req, res) => {
     // Check if user exists
     const userResult = await supabase("GET", "users", null, `?email=eq.${encodeURIComponent(email.toLowerCase())}`);
     if (userResult.data && userResult.data[0]) {
-      // Add existing user to team
+      // Add existing user to team — always as member, never admin
       const existingUser = userResult.data[0];
       await supabase("PATCH", "users", { plan: team.plan }, `?id=eq.${existingUser.id}`);
-      await supabase("POST", "team_members", { team_id: teamId, user_id: existingUser.id, role: "member", invited_email: email, status: "active" });
+      await supabase("POST", "team_members", { team_id: teamId, user_id: existingUser.id, role: "member", invited_email: email.toLowerCase(), status: "active" });
     } else {
-      // Add pending invite
+      // Add pending invite — always as member
       await supabase("POST", "team_members", { team_id: teamId, role: "member", invited_email: email.toLowerCase(), status: "pending" });
     }
     res.json({ success: true, message: `Invite sent to ${email}` });
