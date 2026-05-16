@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Team Dashboard — FieldFix AI</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#f5f6f7;color:#1a1a1a;}
+.header{background:#fff;border-bottom:3px solid #0078d4;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.07);}
+.header-left{display:flex;align-items:center;gap:10px;}
+.header-icon{width:34px;height:34px;background:#0078d4;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;}
+.header-title{font-size:15px;font-weight:800;}
+.header-sub{font-size:9px;color:#999;}
+.back-btn{background:#f0f0f0;border:1px solid #ddd;color:#666;border-radius:8px;padding:6px 14px;font-size:12px;text-decoration:none;}
+.content{max-width:800px;margin:0 auto;padding:24px 16px;}
+.card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:20px;margin-bottom:16px;}
+.card-title{font-size:14px;font-weight:800;margin-bottom:4px;}
+.card-sub{font-size:12px;color:#888;margin-bottom:16px;}
+.stat-row{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
+.stat{background:#f8f8f8;border-radius:10px;padding:12px 16px;flex:1;min-width:100px;cursor:pointer;border:2px solid transparent;transition:all 0.15s;}
+.stat:hover{border-color:#0078d4;}
+.stat.active-filter{border-color:#0078d4;background:#f0f7ff;}
+.stat-num{font-size:24px;font-weight:800;}
+.stat-label{font-size:11px;color:#888;margin-top:2px;}
+.admin-card{background:linear-gradient(135deg,#fff8f5,#fff);border:1px solid #ffd5b8;border-radius:12px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:16px;}
+.admin-avatar{width:48px;height:48px;background:#e65c00;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.admin-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#e65c00;margin-bottom:3px;}
+.admin-name{font-size:15px;font-weight:800;}
+.admin-desc{font-size:11px;color:#888;margin-top:2px;}
+.filter-bar{display:flex;gap:6px;margin-bottom:12px;}
+.filter-btn{font-size:11px;padding:4px 12px;border-radius:20px;border:1px solid #ddd;background:#f5f5f5;cursor:pointer;font-family:inherit;color:#555;transition:all 0.15s;}
+.filter-btn.active{background:#0078d4;color:#fff;border-color:#0078d4;}
+.member-row{background:#f8f8f8;border-radius:10px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.member-email{font-size:13px;font-weight:600;margin-bottom:2px;}
+.member-status{font-size:10px;color:#888;}
+.member-actions{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.role-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;}
+.badge-admin{background:#fff8f5;color:#e65c00;border:1px solid #ffd5b8;}
+.badge-member{background:#e8f5e9;color:#107c10;border:1px solid #a5d6a7;}
+.badge-pending{background:#f5f5f5;color:#888;border:1px solid #ddd;}
+.action-btn{font-size:10px;font-weight:600;padding:4px 10px;border-radius:8px;cursor:pointer;border:1px solid #ddd;background:#fff;font-family:inherit;}
+.btn-make-admin{color:#e65c00;border-color:#ffd5b8;}
+.btn-remove-admin{color:#0078d4;border-color:#b3d4f0;}
+.btn-remove{color:#cc0000;border-color:#ffb8b8;}
+.invite-section{border-top:1px solid #f0f0f0;padding-top:14px;margin-top:4px;}
+.invite-label{font-size:12px;font-weight:700;margin-bottom:8px;}
+.invite-wrap{display:flex;gap:8px;}
+.invite-input{flex:1;padding:9px 12px;border:1.5px solid #e5e5e5;border-radius:8px;font-size:13px;font-family:inherit;outline:none;}
+.invite-input:focus{border-color:#0078d4;}
+.invite-btn{background:#0078d4;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+.invite-hint{font-size:10px;color:#aaa;margin-top:6px;}
+.empty-members{font-size:12px;color:#aaa;padding:16px 0;text-align:center;}
+.msg{padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:12px;display:none;}
+.msg.success{background:#e8f5e9;border:1px solid #a5d6a7;color:#107c10;display:block;}
+.msg.error{background:#fff0eb;border:1px solid #ffb899;color:#cc3300;display:block;}
+.no-team-wrap{text-align:center;padding:40px 20px;}
+.no-team-icon{font-size:48px;margin-bottom:16px;opacity:0.3;}
+.no-team-title{font-size:18px;font-weight:700;margin-bottom:8px;}
+.no-team-sub{font-size:13px;color:#888;margin-bottom:24px;}
+.form-input{width:100%;padding:10px 12px;border:1.5px solid #e5e5e5;border-radius:8px;font-size:13px;font-family:inherit;outline:none;margin-bottom:12px;display:block;}
+.form-input:focus{border-color:#0078d4;}
+.create-btn{width:100%;padding:12px;background:#0078d4;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+.upgrade-link{display:inline-block;background:#e65c00;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="header-icon">👥</div>
+    <div>
+      <div class="header-title">Team Dashboard</div>
+      <div class="header-sub">Manage your FieldFix AI team</div>
+    </div>
+  </div>
+  <a href="/app" class="back-btn">← Back to App</a>
+</div>
+
+<div class="content">
+  <div id="msg" class="msg"></div>
+  <div id="loading" style="text-align:center;padding:40px;color:#888;font-size:13px;">Loading team info...</div>
+  <div id="main-view" style="display:none;"></div>
+  <div id="no-team-view" style="display:none;">
+    <div class="no-team-wrap">
+      <div class="no-team-icon">👥</div>
+      <div class="no-team-title">No Team Yet</div>
+      <div class="no-team-sub">Create a team to invite your technicians and manage access from one place.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Create Your Team</div>
+      <div class="card-sub">Choose a plan and enter your company or plant name.</div>
+      <input type="text" id="team-name" class="form-input" placeholder="Company or plant name"/>
+      <select id="team-plan" class="form-input">
+        <option value="small_team">Small Team — $39/mo — Up to 5 techs</option>
+        <option value="team">Team — $79/mo — Up to 15 techs</option>
+        <option value="plant">Plant — $149/mo — Up to 50 techs</option>
+      </select>
+      <button class="create-btn" onclick="createTeam()">Create Team →</button>
+      <div style="margin-top:10px;font-size:11px;color:#aaa;text-align:center;">Email hello@fieldfix.io after creating to complete billing.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+var token = localStorage.getItem("ff_tok");
+var myRole = null;
+var allMembers = [];
+var currentFilter = "all";
+var teamData = null;
+
+function showMsg(text, type) {
+  var el = document.getElementById("msg");
+  el.textContent = text;
+  el.className = "msg " + type;
+  setTimeout(function() { el.className = "msg"; }, 4000);
+}
+
+function setFilter(filter) {
+  currentFilter = filter;
+  document.querySelectorAll(".filter-btn").forEach(function(btn) {
+    btn.classList.remove("active");
+  });
+  var activeBtn = document.getElementById("filter-" + filter);
+  if (activeBtn) activeBtn.classList.add("active");
+  renderMemberList();
+}
+
+function renderMemberList() {
+  var list = document.getElementById("member-list-container");
+  if (!list) return;
+
+  var filtered = [];
+  if (currentFilter === "all") {
+    filtered = allMembers;
+  } else if (currentFilter === "active") {
+    filtered = allMembers.filter(function(m) { return m.status === "active"; });
+  } else if (currentFilter === "pending") {
+    filtered = allMembers.filter(function(m) { return m.status === "pending"; });
+  }
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="empty-members">No members in this category.</div>';
+    return;
+  }
+
+  var html = "";
+  filtered.forEach(function(m) {
+    var badgeClass = m.role === "admin" ? "badge-admin" : m.status === "pending" ? "badge-pending" : "badge-member";
+    var badgeText = m.role === "admin" ? "ADMIN" : m.status === "pending" ? "PENDING" : "MEMBER";
+    var statusText = m.status === "pending" ? "⏳ Pending — needs to sign up at fieldfix.io" : m.role === "admin" ? "⭐ Has full admin access" : "✅ Active";
+
+    var actions = '<span class="role-badge ' + badgeClass + '">' + badgeText + '</span>';
+
+    if (myRole === "admin") {
+      if (m.status === "active" && m.role !== "admin") {
+        actions += '<button class="action-btn btn-make-admin" onclick="toggleAdmin(\'' + m.id + '\', \'admin\')">Make Admin</button>';
+        actions += '<button class="action-btn btn-remove" onclick="removeMember(\'' + m.user_id + '\')">Remove</button>';
+      } else if (m.role === "admin") {
+        actions += '<button class="action-btn btn-remove-admin" onclick="toggleAdmin(\'' + m.id + '\', \'member\')">Remove Admin</button>';
+      } else if (m.status === "pending") {
+        actions += '<button class="action-btn btn-remove" onclick="removePending(\'' + m.id + '\')">Cancel</button>';
+      }
+    }
+
+    html += '<div class="member-row">';
+    html += '<div><div class="member-email">' + (m.invited_email || "Unknown") + '</div><div class="member-status">' + statusText + '</div></div>';
+    html += '<div class="member-actions">' + actions + '</div>';
+    html += '</div>';
+  });
+
+  list.innerHTML = html;
+}
+
+function renderTeam(team, members, role, me) {
+  teamData = team;
+  myRole = role;
+  allMembers = members;
+
+  var planColors = {small_team:"#0078d4", team:"#6b3fa0", plant:"#107c10"};
+  var planNames = {small_team:"Small Team", team:"Team", plant:"Plant"};
+  var planPrices = {small_team:"$39/mo", team:"$79/mo", plant:"$149/mo"};
+  var color = planColors[team.plan] || "#0078d4";
+
+  var adminMember = members.find(function(m) { return m.role === "admin"; });
+  var activeCount = members.filter(function(m) { return m.status === "active"; }).length;
+  var pendingCount = members.filter(function(m) { return m.status === "pending"; }).length;
+  var availableSeats = team.seats - activeCount;
+
+  var view = document.getElementById("main-view");
+  view.style.display = "block";
+
+  var html = "";
+
+  // Overview card
+  html += '<div class="card">';
+  html += '<div class="card-title">' + team.name + '</div>';
+  html += '<div style="display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:14px;background:' + color + '18;color:' + color + ';border:1px solid ' + color + '40;">' + (planNames[team.plan] || team.plan) + ' — ' + (planPrices[team.plan] || "") + '</div>';
+  html += '<div class="stat-row">';
+  html += '<div class="stat" id="stat-all" onclick="setFilter(\'all\')" title="Show all members"><div class="stat-num" style="color:' + color + ';">' + members.length + '</div><div class="stat-label">Total Members</div></div>';
+  html += '<div class="stat" id="stat-active" onclick="setFilter(\'active\')" title="Show active techs"><div class="stat-num" style="color:' + color + ';">' + activeCount + '</div><div class="stat-label">Active Techs ↗</div></div>';
+  html += '<div class="stat"><div class="stat-num" style="color:#107c10;">' + availableSeats + '</div><div class="stat-label">Seats Available</div></div>';
+  if (pendingCount > 0) {
+    html += '<div class="stat" id="stat-pending" onclick="setFilter(\'pending\')" title="Show pending invites"><div class="stat-num" style="color:#e65c00;">' + pendingCount + '</div><div class="stat-label">Pending ↗</div></div>';
+  }
+  html += '</div></div>';
+
+  // Admin card
+  if (adminMember) {
+    html += '<div class="admin-card">';
+    html += '<div class="admin-avatar">👤</div>';
+    html += '<div>';
+    html += '<div class="admin-label">⭐ Team Administrator</div>';
+    html += '<div class="admin-name">' + (adminMember.invited_email || me.email) + '</div>';
+    html += '<div class="admin-desc">Full access · Can invite, remove, and manage admin permissions</div>';
+    html += '</div></div>';
+  }
+
+  // Members card
+  html += '<div class="card">';
+  html += '<div class="card-title">Team Members</div>';
+  html += '<div class="card-sub">Click Active Techs above to filter. ' + (role === "admin" ? "Use buttons to manage admin access or remove members." : "") + '</div>';
+
+  // Filter buttons
+  html += '<div class="filter-bar">';
+  html += '<button class="filter-btn active" id="filter-all" onclick="setFilter(\'all\')">All (' + members.length + ')</button>';
+  html += '<button class="filter-btn" id="filter-active" onclick="setFilter(\'active\')">Active (' + activeCount + ')</button>';
+  if (pendingCount > 0) {
+    html += '<button class="filter-btn" id="filter-pending" onclick="setFilter(\'pending\')">Pending (' + pendingCount + ')</button>';
+  }
+  html += '</div>';
+
+  html += '<div id="member-list-container"></div>';
+
+  // Invite section
+  if (role === "admin") {
+    html += '<div class="invite-section">';
+    html += '<div class="invite-label">Invite a Technician</div>';
+    html += '<div class="invite-wrap"><input type="email" id="invite-email" class="invite-input" placeholder="tech@company.com"/><button class="invite-btn" onclick="inviteMember()">Send Invite</button></div>';
+    html += '<div class="invite-hint">Invited techs must sign up at fieldfix.io/app using the same email address.</div>';
+    html += '</div>';
+  }
+
+  html += '</div>';
+
+  // Upgrade card
+  html += '<div class="card">';
+  html += '<div class="card-title">Need more seats?</div>';
+  html += '<div class="card-sub" style="margin-bottom:12px;">Contact us to upgrade your plan or add more technicians.</div>';
+  html += '<a href="mailto:hello@fieldfix.io?subject=Upgrade Team — ' + team.name + '" class="upgrade-link">Contact Us to Upgrade →</a>';
+  html += '</div>';
+
+  view.innerHTML = html;
+  renderMemberList();
+}
+
+async function toggleAdmin(memberId, newRole) {
+  var label = newRole === "admin" ? "Grant admin access to this member?" : "Remove admin access?";
+  if (!confirm(label)) return;
+  try {
+    var r = await fetch("/api/teams/toggle-admin", {
+      method:"POST",
+      headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
+      body:JSON.stringify({memberId:memberId, newRole:newRole})
+    });
+    var d = await r.json();
+    if (d.error) { showMsg(d.error, "error"); }
+    else { showMsg(newRole === "admin" ? "Admin access granted" : "Admin access removed", "success"); loadTeam(); }
+  } catch(e) { showMsg("Error: " + e.message, "error"); }
+}
+
+async function inviteMember() {
+  var email = document.getElementById("invite-email").value.trim();
+  if (!email) { showMsg("Enter an email address", "error"); return; }
+  try {
+    var r = await fetch("/api/teams/invite", {
+      method:"POST",
+      headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
+      body:JSON.stringify({email:email})
+    });
+    var d = await r.json();
+    if (d.error) { showMsg(d.error, "error"); }
+    else { showMsg("Invite sent to " + email, "success"); document.getElementById("invite-email").value = ""; loadTeam(); }
+  } catch(e) { showMsg("Error: " + e.message, "error"); }
+}
+
+async function removeMember(userId) {
+  if (!confirm("Remove this tech from the team? They will lose access immediately.")) return;
+  try {
+    var r = await fetch("/api/teams/remove", {
+      method:"POST",
+      headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
+      body:JSON.stringify({userId:userId})
+    });
+    var d = await r.json();
+    if (d.error) { showMsg(d.error, "error"); }
+    else { showMsg("Member removed", "success"); loadTeam(); }
+  } catch(e) { showMsg("Error: " + e.message, "error"); }
+}
+
+async function removePending(memberId) {
+  if (!confirm("Cancel this invite?")) return;
+  try {
+    var r = await fetch("/api/teams/remove-pending", {
+      method:"POST",
+      headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
+      body:JSON.stringify({memberId:memberId})
+    });
+    var d = await r.json();
+    if (d.error) { showMsg(d.error, "error"); }
+    else { showMsg("Invite cancelled", "success"); loadTeam(); }
+  } catch(e) { showMsg("Error: " + e.message, "error"); }
+}
+
+async function createTeam() {
+  var name = document.getElementById("team-name").value.trim();
+  var plan = document.getElementById("team-plan").value;
+  if (!name) { showMsg("Enter your company or plant name", "error"); return; }
+  try {
+    var r = await fetch("/api/teams/create", {
+      method:"POST",
+      headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
+      body:JSON.stringify({name:name, plan:plan})
+    });
+    var d = await r.json();
+    if (d.error) { showMsg(d.error, "error"); }
+    else {
+      showMsg("Team created! Email hello@fieldfix.io to complete billing.", "success");
+      document.getElementById("no-team-view").style.display = "none";
+      loadTeam();
+    }
+  } catch(e) { showMsg("Error: " + e.message, "error"); }
+}
+
+async function loadTeam() {
+  if (!token) { window.location.href = "/app"; return; }
+  try {
+    var meRes = await fetch("/api/me", {headers:{"Authorization":"Bearer "+token}});
+    if (meRes.status === 401) { window.location.href = "/app"; return; }
+    var me = await meRes.json();
+
+    var r = await fetch("/api/teams/mine", {headers:{"Authorization":"Bearer "+token}});
+    var d = await r.json();
+    document.getElementById("loading").style.display = "none";
+
+    if (d.team) {
+      renderTeam(d.team, d.members, d.myRole, me);
+    } else {
+      document.getElementById("no-team-view").style.display = "block";
+    }
+  } catch(e) {
+    document.getElementById("loading").textContent = "Error loading team. Please try again.";
+  }
+}
+
+loadTeam();
+</script>
+</body>
+</html>
