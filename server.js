@@ -18,7 +18,6 @@ app.use(express.json());
 
 // Serve app static files
 app.use("/app", express.static(path.join(__dirname, "public")));
-app.use(express.static(path.join(__dirname, "public")));
 
 const API_KEY = process.env.ANTHROPIC_API_KEY;
 const SUPABASE_URL = process.env.SUPABASE_URL;
