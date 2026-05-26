@@ -11,9 +11,9 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135d
 #logo-icon{width:40px;height:40px;background:#e65c00;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;}
 #logo-text{font-size:18px;font-weight:800;}
 #title{font-size:28px;font-weight:900;letter-spacing:-1px;margin-bottom:8px;text-align:center;}
-#sub{font-size:14px;color:#aaa;margin-bottom:36px;text-align:center;max-width:400px;}
-#plans{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;max-width:1000px;width:100%;margin-bottom:28px;}
-.pc{background:#1a1a1a;border:2px solid #333;border-radius:14px;padding:24px 20px;flex:1;min-width:160px;max-width:190px;position:relative;}
+#sub{font-size:14px;color:#aaa;margin-bottom:36px;text-align:center;max-width:460px;line-height:1.6;}
+#plans{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;max-width:1060px;width:100%;margin-bottom:28px;}
+.pc{background:#1a1a1a;border:2px solid #333;border-radius:14px;padding:24px 20px;flex:1;min-width:160px;max-width:185px;position:relative;display:flex;flex-direction:column;}
 .pc.hi{background:#e65c00;border-color:#e65c00;box-shadow:0 8px 28px rgba(230,92,0,.4);}
 .pbadge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#fff;color:#e65c00;font-size:9px;font-weight:800;padding:3px 10px;border-radius:20px;white-space:nowrap;}
 .pname{font-size:13px;font-weight:700;color:#aaa;margin-bottom:4px;}
@@ -21,15 +21,21 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135d
 .pprice{font-size:26px;font-weight:900;color:#fff;margin-bottom:2px;}
 .pper{font-size:12px;font-weight:400;color:#666;}
 .pc.hi .pper{color:rgba(255,255,255,.7);}
-.pdiv{height:1px;background:#2a2a2a;margin:12px 0;}
+.pdesc{font-size:11px;color:#777;margin-bottom:12px;line-height:1.5;flex:1;}
+.pc.hi .pdesc{color:rgba(255,255,255,0.8);}
+.pdiv{height:1px;background:#2a2a2a;margin:10px 0;}
 .pc.hi .pdiv{background:rgba(255,255,255,.25);}
-.pf{display:flex;gap:6px;margin-bottom:6px;font-size:11px;color:#888;}
+.pf{display:flex;gap:6px;margin-bottom:5px;font-size:11px;color:#888;}
 .pc.hi .pf{color:#fff;}
-.pck{color:#e65c00;}
+.pck{color:#e65c00;flex-shrink:0;}
 .pc.hi .pck{color:#fff;}
-.pbtn{margin-top:16px;width:100%;padding:10px;border-radius:9px;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+.pbtn{margin-top:16px;width:100%;padding:10px;border-radius:9px;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.pbtn:hover{opacity:0.9;transform:translateY(-1px);}
 .back-link{color:#555;font-size:13px;text-decoration:none;margin-top:8px;}
 .back-link:hover{color:#fff;}
+.guarantee{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:16px 24px;text-align:center;max-width:500px;margin-top:8px;}
+.guarantee-text{font-size:12px;color:#888;line-height:1.6;}
+.guarantee-text strong{color:#4caf50;}
 </style>
 </head>
 <body>
@@ -44,81 +50,93 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135d
 
 <div id="plans">
 
+  <!-- Free -->
   <div class="pc">
     <div class="pname">Free</div>
     <div class="pprice">$0</div>
+    <div class="pdesc">Perfect for trying out FieldFix AI. Get 3 troubleshooting queries per day across all 24 equipment categories. No credit card required.</div>
     <div class="pdiv"></div>
     <div class="pf"><span class="pck">✓</span>3 queries/day</div>
     <div class="pf"><span class="pck">✓</span>All 24 categories</div>
     <div class="pf"><span class="pck">✓</span>No credit card</div>
     <div class="pf"><span class="pck">✓</span>1 user</div>
-    <button class="pbtn" style="background:#333;color:#666;cursor:default;">Current Plan</button>
+    <button class="pbtn" style="background:#333;color:#666;" onclick="window.location.href='/app'">Get Started Free</button>
   </div>
 
+  <!-- Pro -->
   <div class="pc hi">
     <div class="pbadge">MOST POPULAR</div>
     <div class="pname">Pro</div>
     <div class="pprice">$9.99<span class="pper">/mo</span></div>
+    <div class="pdesc">For the individual maintenance technician. Unlimited queries, full search history, and access to all 24 equipment categories. Cancel anytime.</div>
     <div class="pdiv"></div>
     <div class="pf"><span class="pck">✓</span>Unlimited queries</div>
     <div class="pf"><span class="pck">✓</span>Search history</div>
     <div class="pf"><span class="pck">✓</span>All 24 categories</div>
     <div class="pf"><span class="pck">✓</span>Cancel anytime</div>
-    <button class="pbtn" style="background:#fff;color:#e65c00;" onclick="contact('Pro - $9.99/mo')">Go Pro →</button>
+    <button class="pbtn" style="background:#fff;color:#e65c00;" onclick="window.location.href='https://buy.stripe.com/3cI28sc0A6mf0rMdPTeEo00'">Start Pro →</button>
   </div>
 
+  <!-- Small Team -->
   <div class="pc" style="border-color:#0078d4;">
     <div class="pname" style="color:#0078d4;">Small Team</div>
     <div class="pprice">$39<span class="pper">/mo</span></div>
+    <div class="pdesc">For small maintenance crews. Everything in Pro for up to 5 technicians under one account. Includes team dashboard and invite by email.</div>
     <div class="pdiv" style="background:rgba(0,120,212,0.2);"></div>
     <div class="pf"><span class="pck" style="color:#0078d4;">✓</span>Unlimited queries</div>
     <div class="pf"><span class="pck" style="color:#0078d4;">✓</span>Up to 5 techs</div>
     <div class="pf"><span class="pck" style="color:#0078d4;">✓</span>Team dashboard</div>
     <div class="pf"><span class="pck" style="color:#0078d4;">✓</span>Invite by email</div>
-    <button class="pbtn" style="background:#0078d4;color:#fff;" onclick="contact('Small Team - $39/mo')">Get Started →</button>
+    <button class="pbtn" style="background:#0078d4;color:#fff;" onclick="window.location.href='https://buy.stripe.com/dRmdRa7KkbGzfmGcLPeEo01'">Start Team →</button>
   </div>
 
+  <!-- Team -->
   <div class="pc" style="border-color:#6b3fa0;">
     <div class="pname" style="color:#6b3fa0;">Team</div>
     <div class="pprice">$79<span class="pper">/mo</span></div>
+    <div class="pdesc">For mid-size plant maintenance teams. Everything in Pro for up to 15 technicians. Team dashboard, admin controls, and invite management.</div>
     <div class="pdiv" style="background:rgba(107,63,160,0.2);"></div>
     <div class="pf"><span class="pck" style="color:#6b3fa0;">✓</span>Unlimited queries</div>
     <div class="pf"><span class="pck" style="color:#6b3fa0;">✓</span>Up to 15 techs</div>
     <div class="pf"><span class="pck" style="color:#6b3fa0;">✓</span>Team dashboard</div>
-    <div class="pf"><span class="pck" style="color:#6b3fa0;">✓</span>Invite by email</div>
-    <button class="pbtn" style="background:#6b3fa0;color:#fff;" onclick="contact('Team - $79/mo')">Get Started →</button>
+    <div class="pf"><span class="pck" style="color:#6b3fa0;">✓</span>Admin controls</div>
+    <button class="pbtn" style="background:#6b3fa0;color:#fff;" onclick="window.location.href='https://buy.stripe.com/5kQfZic0Ah0TfmG3bfeEo02'">Start Team →</button>
   </div>
 
+  <!-- Plant -->
   <div class="pc" style="border-color:#107c10;">
     <div class="pname" style="color:#107c10;">Plant</div>
     <div class="pprice">$149<span class="pper">/mo</span></div>
+    <div class="pdesc">For large facilities with full maintenance departments. Everything in Pro for up to 50 technicians. Priority support and full admin controls.</div>
     <div class="pdiv" style="background:rgba(16,124,16,0.2);"></div>
     <div class="pf"><span class="pck" style="color:#107c10;">✓</span>Unlimited queries</div>
     <div class="pf"><span class="pck" style="color:#107c10;">✓</span>Up to 50 techs</div>
     <div class="pf"><span class="pck" style="color:#107c10;">✓</span>Team dashboard</div>
     <div class="pf"><span class="pck" style="color:#107c10;">✓</span>Priority support</div>
-    <button class="pbtn" style="background:#107c10;color:#fff;" onclick="contact('Plant - $149/mo')">Get Started →</button>
+    <button class="pbtn" style="background:#107c10;color:#fff;" onclick="window.location.href='https://buy.stripe.com/28E7sMd4E9yr0rM27beEo03'">Start Plant →</button>
   </div>
 
+  <!-- Enterprise -->
   <div class="pc" style="border-color:#e65c00;">
     <div class="pname" style="color:#e65c00;">Enterprise</div>
     <div class="pprice" style="font-size:20px;padding-top:4px;">Custom</div>
+    <div class="pdesc">For multi-plant operations with 50+ technicians. Custom pricing, dedicated support, and tailored onboarding. Contact us to get started.</div>
     <div class="pdiv" style="background:rgba(230,92,0,0.2);"></div>
     <div class="pf"><span class="pck" style="color:#e65c00;">✓</span>Unlimited queries</div>
     <div class="pf"><span class="pck" style="color:#e65c00;">✓</span>50+ techs</div>
     <div class="pf"><span class="pck" style="color:#e65c00;">✓</span>Multi-plant</div>
     <div class="pf"><span class="pck" style="color:#e65c00;">✓</span>Dedicated support</div>
-    <button class="pbtn" style="background:#e65c00;color:#fff;" onclick="contact('Enterprise')">Contact Us →</button>
+    <button class="pbtn" style="background:#e65c00;color:#fff;" onclick="window.location.href='mailto:hello@fieldfix.io?subject=Enterprise Plan Inquiry'">Contact Us →</button>
   </div>
 
 </div>
 
+<div class="guarantee">
+  <div class="guarantee-text"><strong>✅ No contracts. Cancel anytime.</strong><br/>All paid plans include a 7-day money-back guarantee. If FieldFix AI doesn't help you troubleshoot faster we'll refund you — no questions asked.</div>
+</div>
+
+<br/>
 <a href="/app" class="back-link">← Back to app</a>
 
-<script>
-function contact(plan){
-  window.location.href = 'mailto:hello@fieldfix.io?subject=Upgrade to ' + encodeURIComponent(plan) + '&body=Hi, I would like to upgrade to the ' + encodeURIComponent(plan) + ' plan. My account email is: ';
-}
-</script>
 </body>
 </html>
