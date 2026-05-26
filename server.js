@@ -200,7 +200,10 @@ app.get("/pricing", (req, res) => {
 app.get("/team", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "team.html"));
 });
-
+// Account management page
+app.get("/account", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "account.html"));
+});
 app.get("/app/*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
