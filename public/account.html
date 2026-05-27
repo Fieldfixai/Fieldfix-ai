@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Manage Account — FieldFix AI</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#f5f6f7;color:#1a1a1a;}
+.header{background:#fff;border-bottom:3px solid #e65c00;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.07);}
+.header-left{display:flex;align-items:center;gap:10px;}
+.header-icon{width:34px;height:34px;background:#e65c00;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;}
+.header-title{font-size:15px;font-weight:800;}
+.header-sub{font-size:9px;color:#999;}
+.back-btn{background:#f0f0f0;border:1px solid #ddd;color:#666;border-radius:8px;padding:6px 14px;font-size:12px;text-decoration:none;}
+.content{max-width:600px;margin:0 auto;padding:24px 16px;}
+.card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:24px;margin-bottom:16px;}
+.card-title{font-size:15px;font-weight:800;margin-bottom:4px;}
+.card-sub{font-size:12px;color:#888;margin-bottom:20px;}
+.plan-display{display:flex;align-items:center;justify-content:space-between;background:#f8f8f8;border-radius:10px;padding:16px;margin-bottom:20px;}
+.plan-name{font-size:16px;font-weight:800;}
+.plan-price{font-size:13px;color:#888;margin-top:2px;}
+.plan-badge{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;}
+.section-title{font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}
+.upgrade-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.upgrade-card{border:2px solid #e5e5e5;border-radius:10px;padding:14px;cursor:pointer;transition:all 0.15s;text-decoration:none;display:block;}
+.upgrade-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.1);}
+.upgrade-name{font-size:13px;font-weight:700;margin-bottom:2px;}
+.upgrade-price{font-size:18px;font-weight:900;margin-bottom:4px;}
+.upgrade-desc{font-size:10px;color:#888;line-height:1.4;}
+.upgrade-btn-label{display:inline-block;margin-top:10px;font-size:11px;font-weight:700;padding:5px 12px;border-radius:8px;color:#fff;}
+.divider{height:1px;background:#f0f0f0;margin:20px 0;}
+.cancel-section{}
+.cancel-warning{background:#fff8f5;border:1px solid #ffd5b8;border-radius:10px;padding:14px;margin-bottom:16px;font-size:12px;color:#888;line-height:1.6;}
+.cancel-warning strong{color:#e65c00;}
+.cancel-btn{width:100%;padding:12px;background:#fff;border:2px solid #cc0000;border-radius:10px;color:#cc0000;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.cancel-btn:hover{background:#fff0f0;}
+.contact-section{background:#f8f8f8;border-radius:10px;padding:16px;text-align:center;}
+.contact-text{font-size:12px;color:#888;margin-bottom:10px;line-height:1.5;}
+.contact-email{display:inline-block;background:#e65c00;color:#fff;padding:8px 20px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;}
+.msg{padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:12px;display:none;}
+.msg.success{background:#e8f5e9;border:1px solid #a5d6a7;color:#107c10;display:block;}
+.msg.error{background:#fff0eb;border:1px solid #ffb899;color:#cc3300;display:block;}
+.free-notice{text-align:center;padding:40px 20px;}
+.free-icon{font-size:48px;margin-bottom:16px;opacity:0.3;}
+.free-title{font-size:18px;font-weight:700;margin-bottom:8px;}
+.free-sub{font-size:13px;color:#888;margin-bottom:24px;}
+.upgrade-link{display:inline-block;background:#e65c00;color:#fff;padding:12px 28px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:700;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="header-icon">⚙️</div>
+    <div>
+      <div class="header-title">Manage Account</div>
+      <div class="header-sub">Upgrade, downgrade or cancel your plan</div>
+    </div>
+  </div>
+  <a href="/app" class="back-btn">← Back to App</a>
+</div>
+
+<div class="content">
+  <div id="msg" class="msg"></div>
+  <div id="loading" style="text-align:center;padding:40px;color:#888;font-size:13px;">Loading your account...</div>
+  <div id="main-content" style="display:none;"></div>
+</div>
+
+<script>
+var token = localStorage.getItem("ff_tok");
+
+var PLANS = {
+  pro:        {name:"Pro",         price:"$9.99/mo",  color:"#e65c00", link:"https://buy.stripe.com/3cI28sc0A6mf0rMdPTeEo00"},
+  small_team: {name:"Small Team",  price:"$39/mo",    color:"#0078d4", link:"https://buy.stripe.com/dRmdRa7KkbGzfmGcLPeEo01"},
+  team:       {name:"Team",        price:"$79/mo",    color:"#6b3fa0", link:"https://buy.stripe.com/5kQfZic0Ah0TfmG3bfeEo02"},
+  plant:      {name:"Plant",       price:"$149/mo",   color:"#107c10", link:"https://buy.stripe.com/28E7sMd4E9yr0rM27beEo03"},
+};
+
+var UPGRADE_OPTIONS = {
+  free: ["pro","small_team","team","plant"],
+  pro: ["small_team","team","plant"],
+  small_team: ["team","plant"],
+  team: ["plant"],
+  plant: [],
+};
+
+var UPGRADE_DESC = {
+  pro:        "Unlimited queries + search history for 1 tech",
+  small_team: "Unlimited queries for up to 5 techs + team dashboard",
+  team:       "Unlimited queries for up to 15 techs + admin controls",
+  plant:      "Unlimited queries for up to 50 techs + priority support",
+};
+
+function showMsg(text, type) {
+  var el = document.getElementById("msg");
+  el.textContent = text;
+  el.className = "msg " + type;
+  setTimeout(function() { el.className = "msg"; }, 5000);
+}
+
+async function loadAccount() {
+  if (!token) { window.location.href = "/app"; return; }
+  try {
+    var r = await fetch("/api/me", {headers:{"Authorization":"Bearer "+token}});
+    if (r.status === 401) { window.location.href = "/app"; return; }
+    var user = await r.json();
+    document.getElementById("loading").style.display = "none";
+    renderAccount(user);
+  } catch(e) {
+    document.getElementById("loading").textContent = "Error loading account. Please try again.";
+  }
+}
+
+function renderAccount(user) {
+  var content = document.getElementById("main-content");
+  content.style.display = "block";
+
+  var plan = user.plan || "free";
+  var planInfo = PLANS[plan];
+  var upgradeOptions = UPGRADE_OPTIONS[plan] || [];
+  var isPaid = plan !== "free";
+
+  var html = "";
+
+  // Current plan card
+  html += '<div class="card">';
+  html += '<div class="card-title">Your Current Plan</div>';
+  html += '<div class="card-sub">Manage your FieldFix AI subscription below.</div>';
+  html += '<div class="plan-display">';
+  html += '<div>';
+
+  if (plan === "free") {
+    html += '<div class="plan-name">Free Plan</div>';
+    html += '<div class="plan-price">$0 — 3 queries per day</div>';
+  } else {
+    html += '<div class="plan-name">' + planInfo.name + '</div>';
+    html += '<div class="plan-price">' + planInfo.price + ' — billed monthly</div>';
+  }
+
+  html += '</div>';
+
+  if (plan === "free") {
+    html += '<span class="plan-badge" style="background:#f5f5f5;color:#888;">Free</span>';
+  } else {
+    html += '<span class="plan-badge" style="background:' + planInfo.color + '18;color:' + planInfo.color + ';border:1px solid ' + planInfo.color + '40;">Active ✓</span>';
+  }
+
+  html += '</div>';
+
+  // Account info
+  html += '<div style="font-size:12px;color:#888;margin-bottom:4px;">Account email</div>';
+  html += '<div style="font-size:14px;font-weight:600;margin-bottom:16px;">' + user.email + '</div>';
+
+  html += '</div>';
+
+  // Upgrade options
+  if (upgradeOptions.length > 0) {
+    html += '<div class="card">';
+    html += '<div class="card-title">Upgrade Your Plan</div>';
+    html += '<div class="card-sub">Get more queries, more techs, and more features.</div>';
+    html += '<div class="upgrade-grid">';
+
+    upgradeOptions.forEach(function(key) {
+      var p = PLANS[key];
+      html += '<a href="' + p.link + '" class="upgrade-card" style="border-color:' + p.color + '20;">';
+      html += '<div class="upgrade-name" style="color:' + p.color + ';">' + p.name + '</div>';
+      html += '<div class="upgrade-price">' + p.price + '</div>';
+      html += '<div class="upgrade-desc">' + UPGRADE_DESC[key] + '</div>';
+      html += '<span class="upgrade-btn-label" style="background:' + p.color + ';">Upgrade →</span>';
+      html += '</a>';
+    });
+
+    html += '</div>';
+    html += '<div style="font-size:11px;color:#aaa;">You will be charged the new amount immediately. Your old plan is cancelled automatically.</div>';
+    html += '</div>';
+  }
+
+  // Cancel section for paid users
+  if (isPaid) {
+    html += '<div class="card">';
+    html += '<div class="card-title">Cancel Subscription</div>';
+    html += '<div class="card-sub">We\'re sorry to see you go.</div>';
+    html += '<div class="cancel-warning">';
+    html += '<strong>Before you cancel:</strong> Your Pro access continues until the end of your current billing period. After that your account reverts to the free plan with 3 queries per day.';
+    html += '</div>';
+    html += '<button class="cancel-btn" onclick="requestCancel()">Cancel My Subscription</button>';
+    html += '</div>';
+  }
+
+  // Contact support
+  html += '<div class="card">';
+  html += '<div class="card-title">Need Help?</div>';
+  html += '<div class="contact-section">';
+  html += '<div class="contact-text">Have a question about billing, need a refund, or want to discuss enterprise pricing? We respond within 24 hours.</div>';
+  html += '<a href="mailto:hello@fieldfix.io?subject=Account Help — ' + user.email + '" class="contact-email">Email hello@fieldfix.io</a>';
+  html += '</div>';
+  html += '</div>';
+
+  // Free upgrade prompt
+  if (plan === "free") {
+    html += '<div class="card" style="background:linear-gradient(135deg,#fff8f5,#fff);border-color:#ffd5b8;">';
+    html += '<div class="card-title" style="color:#e65c00;">Ready to go unlimited?</div>';
+    html += '<div class="card-sub">One prevented downtime event pays for years of Pro.</div>';
+    html += '<a href="https://buy.stripe.com/3cI28sc0A6mf0rMdPTeEo00" style="display:block;background:#e65c00;color:#fff;padding:12px;border-radius:10px;text-align:center;text-decoration:none;font-size:14px;font-weight:700;">Start Pro — $9.99/mo →</a>';
+    html += '</div>';
+  }
+
+  content.innerHTML = html;
+}
+
+function requestCancel() {
+  if (!confirm("Are you sure you want to cancel? Your access continues until end of billing period.")) return;
+  var email = "";
+  try {
+    var meDiv = document.querySelector('[style*="font-weight:600"]');
+    if (meDiv) email = meDiv.textContent;
+  } catch(e) {}
+  window.location.href = "mailto:hello@fieldfix.io?subject=Cancel Subscription Request&body=Hi, I would like to cancel my FieldFix AI subscription. My account email is: " + encodeURIComponent(email);
+}
+
+loadAccount();
+</script>
+</body>
+</html>
