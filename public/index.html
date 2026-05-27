@@ -7,8 +7,6 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:#f5f6f7;color:#1a1a1a;min-height:100vh;}
-
-/* AUTH */
 .auth-wrap{min-height:100vh;background:linear-gradient(135deg,#1a1a1a,#2d1a0a);display:flex;align-items:center;justify-content:center;padding:24px;}
 .auth-box{background:#fff;border-radius:16px;padding:36px 32px;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,0.3);}
 .auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:24px;justify-content:center;}
@@ -25,8 +23,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f5f6f7;color:#1a1a1
 .auth-error{background:#fff0eb;border:1px solid #ffb899;color:#cc3300;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:12px;display:none;}
 .free-badge{background:#f5f5f5;border-radius:8px;padding:10px 14px;font-size:12px;color:#666;text-align:center;margin-bottom:16px;}
 .free-badge strong{color:#e65c00;}
-
-/* APP */
 .app-wrap{display:flex;flex-direction:column;height:100vh;}
 .app-header{background:#fff;border-bottom:3px solid #e65c00;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,0.07);}
 .app-header-left{display:flex;align-items:center;gap:10px;}
@@ -37,16 +33,12 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f5f6f7;color:#1a1a1
 .badge{background:#fff8f5;border:1px solid #e65c00;border-radius:20px;padding:3px 10px;font-size:11px;color:#e65c00;font-weight:600;}
 .hbtn{border-radius:8px;padding:5px 10px;font-size:11px;cursor:pointer;font-family:inherit;border:1px solid #ddd;background:#f0f0f0;color:#666;text-decoration:none;display:inline-block;}
 .upgrade-btn{background:#e65c00;color:#fff;border:none;border-radius:20px;padding:5px 12px;font-size:11px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;}
-
-/* SELECTOR */
 .cat-bar{background:#fff;border-bottom:1px solid #ebebeb;padding:8px 16px;flex-shrink:0;display:flex;align-items:center;gap:10px;}
 .cat-label{font-size:11px;font-weight:700;color:#888;white-space:nowrap;text-transform:uppercase;letter-spacing:0.5px;}
 .cat-select-wrap{position:relative;flex:1;max-width:460px;}
 .cat-select{width:100%;padding:8px 32px 8px 12px;border:1.5px solid #e5e5e5;border-radius:10px;font-size:13px;font-family:inherit;font-weight:600;color:#1a1a1a;background:#f8f8f8;appearance:none;-webkit-appearance:none;cursor:pointer;outline:none;}
 .cat-select:focus{border-color:#e65c00;}
 .select-arrow{position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:10px;color:#888;}
-
-/* MAIN */
 .app-main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
 .empty-state{flex:1;overflow-y:auto;padding:20px;}
 .hero{text-align:center;margin-bottom:20px;}
@@ -61,8 +53,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f5f6f7;color:#1a1a1
 .free-notice-text{font-size:11px;font-weight:700;color:#e65c00;}
 .free-notice-sub{font-size:10px;color:#888;}
 .free-notice-btn{background:#e65c00;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;text-decoration:none;display:inline-block;}
-
-/* CHAT */
 .chat-wrap{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px;}
 .msg-row{display:flex;gap:7px;align-items:flex-start;}
 .msg-row.user{flex-direction:row-reverse;}
@@ -78,8 +68,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f5f6f7;color:#1a1a1
 .dot:nth-child(3){animation-delay:.36s;}
 .nudge{background:#fff8f5;border:1px solid #ffd5b8;border-radius:10px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .nudge-text{font-size:11px;color:#e65c00;font-weight:600;}
-
-/* INPUT */
 .input-bar{background:#fff;border-top:1px solid #ebebeb;padding:10px 16px;flex-shrink:0;}
 .input-wrap{display:flex;gap:7px;align-items:flex-end;max-width:860px;margin:0 auto;}
 .msg-input{flex:1;background:#f8f8f8;border:1.5px solid #e5e5e5;color:#1a1a1a;padding:8px 12px;font-size:12px;font-family:inherit;resize:none;outline:none;line-height:1.5;border-radius:10px;}
@@ -87,7 +75,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f5f6f7;color:#1a1a1
 .send-btn{background:#e65c00;color:#fff;border:none;padding:0 18px;height:48px;font-size:12px;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;white-space:nowrap;}
 .send-btn:disabled{background:#e5e5e5;color:#aaa;cursor:not-allowed;}
 .input-hint{font-size:9px;color:#ccc;margin-top:4px;text-align:center;}
-
 .step{display:flex;gap:8px;margin:5px 0;align-items:flex-start;}
 .snum{background:#f0f0f0;color:#333;font-weight:700;min-width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;}
 .bul{margin:3px 0;padding-left:4px;color:#444;}
@@ -151,6 +138,7 @@ strong{font-weight:700;}
         <a id="history-btn" href="/history" target="_blank" class="hbtn" style="display:none;">🕐 History</a>
         <a id="team-btn" href="/team" target="_blank" class="hbtn" style="display:none;">👥 Team</a>
         <button class="hbtn" id="new-btn" onclick="newChat()" style="display:none;">New</button>
+        <a href="/account" target="_blank" class="hbtn">My Account</a>
         <button class="hbtn" onclick="doLogout()">Sign Out</button>
       </div>
     </div>
@@ -484,8 +472,6 @@ async function saveHistory(question, answer) {
     });
   } catch(e) {}
 }
-
-// Team page at /team
 
 document.addEventListener("DOMContentLoaded", () => {
   buildPrompts();
