@@ -74,7 +74,6 @@ async function requireAuth(req, res, next) {
     if (!userResult.data || !userResult.data[0]) return res.status(401).json({ error: "User not found" });
     req.user = userResult.data[0];
     req.userId = session.user_id;
-    // Update last active timestamp
     await supabase("PATCH", "sessions", { last_active: new Date().toISOString() }, `?token=eq.${token}`);
     next();
   } catch (e) {
@@ -120,7 +119,6 @@ app.post("/api/login", async (req, res) => {
       await supabase("PATCH", "users", { queries_used: 0, queries_reset_date: today }, `?id=eq.${user.id}`);
       queriesUsed = 0;
     }
-    // Delete ALL existing sessions for this user — prevents account sharing
     await supabase("DELETE", "sessions", null, `?user_id=eq.${user.id}`);
     const token = generateToken();
     await supabase("POST", "sessions", { user_id: user.id, token, last_active: new Date().toISOString() });
@@ -176,34 +174,48 @@ app.get("/api/status", (req, res) => {
   res.json({ status: "running", keyLoaded: !!API_KEY, supabaseUrl: !!SUPABASE_URL, supabaseKey: !!SUPABASE_KEY });
 });
 
-// Landing page at root
+// ── PAGE ROUTES ──
+
+// Landing page
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "landing.html"));
 });
 
-// App at /app
+// App
 app.get("/app", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// History page
+// History
 app.get("/history", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "history.html"));
 });
 
-// Pricing page
+// Pricing
 app.get("/pricing", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "pricing.html"));
 });
 
-// Team page
+// Team
 app.get("/team", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "team.html"));
 });
-// Account management page
+
+// Account
 app.get("/account", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "account.html"));
 });
+
+// Terms of Service
+app.get("/terms", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "terms.html"));
+});
+
+// Privacy Policy
+app.get("/privacy", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "privacy.html"));
+});
+
 app.get("/app/*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
@@ -213,29 +225,17 @@ app.listen(PORT, () => console.log(`FieldFix AI running on port ${PORT}`));
 
 // ── TEAM ROUTES ──
 
-// Create a team
 app.post("/api/teams/create", requireAuth, async (req, res) => {
   const { name, plan } = req.body;
   const seats = plan === "small_team" ? 5 : plan === "team" ? 15 : plan === "plant" ? 50 : 5;
   try {
-    // Update user plan
     await supabase("PATCH", "users", { plan }, `?id=eq.${req.userId}`);
-    // Create team
-    const teamResult = await supabase("POST", "teams", {
-      name,
-      admin_user_id: req.userId,
-      plan,
-      seats
-    });
+    const teamResult = await supabase("POST", "teams", { name, admin_user_id: req.userId, plan, seats });
     if (!teamResult.data || !teamResult.data[0]) return res.status(500).json({ error: "Failed to create team" });
     const team = teamResult.data[0];
-    // Add creator as admin - always
     await supabase("POST", "team_members", {
-      team_id: team.id,
-      user_id: req.userId,
-      role: "admin",
-      invited_email: req.user.email,
-      status: "active"
+      team_id: team.id, user_id: req.userId, role: "admin",
+      invited_email: req.user.email, status: "active"
     });
     res.json({ team });
   } catch (e) {
@@ -243,7 +243,6 @@ app.post("/api/teams/create", requireAuth, async (req, res) => {
   }
 });
 
-// Get my team
 app.get("/api/teams/mine", requireAuth, async (req, res) => {
   try {
     const memberResult = await supabase("GET", "team_members", null, `?user_id=eq.${req.userId}`);
@@ -257,28 +256,22 @@ app.get("/api/teams/mine", requireAuth, async (req, res) => {
   }
 });
 
-// Invite a team member
 app.post("/api/teams/invite", requireAuth, async (req, res) => {
   const { email } = req.body;
   try {
-    // Get admin's team
     const memberResult = await supabase("GET", "team_members", null, `?user_id=eq.${req.userId}&role=eq.admin`);
     if (!memberResult.data || !memberResult.data[0]) return res.status(403).json({ error: "You are not a team admin" });
     const teamId = memberResult.data[0].team_id;
-    // Check seat limit
     const teamResult = await supabase("GET", "teams", null, `?id=eq.${teamId}`);
     const team = teamResult.data[0];
     const allMembers = await supabase("GET", "team_members", null, `?team_id=eq.${teamId}`);
     if (allMembers.data.length >= team.seats) return res.status(400).json({ error: `Seat limit reached (${team.seats} seats). Upgrade your plan.` });
-    // Check if user exists
     const userResult = await supabase("GET", "users", null, `?email=eq.${encodeURIComponent(email.toLowerCase())}`);
     if (userResult.data && userResult.data[0]) {
-      // Add existing user to team — always as member, never admin
       const existingUser = userResult.data[0];
       await supabase("PATCH", "users", { plan: team.plan }, `?id=eq.${existingUser.id}`);
       await supabase("POST", "team_members", { team_id: teamId, user_id: existingUser.id, role: "member", invited_email: email.toLowerCase(), status: "active" });
     } else {
-      // Add pending invite — always as member
       await supabase("POST", "team_members", { team_id: teamId, role: "member", invited_email: email.toLowerCase(), status: "pending" });
     }
     res.json({ success: true, message: `Invite sent to ${email}` });
@@ -287,14 +280,11 @@ app.post("/api/teams/invite", requireAuth, async (req, res) => {
   }
 });
 
-// Toggle member admin role
 app.post("/api/teams/toggle-admin", requireAuth, async (req, res) => {
   const { memberId, newRole } = req.body;
   try {
-    // Verify requester is admin
     const adminCheck = await supabase("GET", "team_members", null, `?user_id=eq.${req.userId}&role=eq.admin`);
     if (!adminCheck.data || !adminCheck.data[0]) return res.status(403).json({ error: "Not authorized" });
-    // Update role
     await supabase("PATCH", "team_members", { role: newRole }, `?id=eq.${memberId}`);
     res.json({ success: true });
   } catch (e) {
@@ -302,7 +292,6 @@ app.post("/api/teams/toggle-admin", requireAuth, async (req, res) => {
   }
 });
 
-// Remove pending invite
 app.post("/api/teams/remove-pending", requireAuth, async (req, res) => {
   const { memberId } = req.body;
   try {
@@ -315,7 +304,6 @@ app.post("/api/teams/remove-pending", requireAuth, async (req, res) => {
   }
 });
 
-// Remove a team member
 app.post("/api/teams/remove", requireAuth, async (req, res) => {
   const { userId } = req.body;
   try {
@@ -329,9 +317,7 @@ app.post("/api/teams/remove", requireAuth, async (req, res) => {
   }
 });
 
-// Get all users (owner only - for admin dashboard)
 app.get("/api/admin/users", requireAuth, async (req, res) => {
-  // Only allow owner email
   if (req.user.email !== process.env.OWNER_EMAIL) return res.status(403).json({ error: "Not authorized" });
   try {
     const users = await supabase("GET", "users", null, `?order=created_at.desc&limit=100`);
@@ -343,6 +329,7 @@ app.get("/api/admin/users", requireAuth, async (req, res) => {
 });
 
 // ── HISTORY ROUTES ──
+
 app.post("/api/history/save", requireAuth, async (req, res) => {
   const { question, answer, category } = req.body;
   if (req.user.plan === "free") return res.json({ saved: false });
